@@ -26,6 +26,8 @@ public:
 private:
   node* parsev(std::string x);
   sdi find_match(std::string x);
+  std::vector<std::string> split(const std::string &s, char delim);
+  std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems);
 };
 
 sdi parser::find_match(std::string x) {
@@ -65,6 +67,7 @@ node* parser::parsev(std::string x) {
     if (x[i] == '(') {
       sdi k = find_match(x.substr(i));
       node* c = parsev(k.first);
+      c->parent = n;
       c->weight = k.second.first;
       n->adj_list.push_back(c);
       i+=k.second.second+1;
@@ -85,7 +88,7 @@ node* parser::parsev(std::string x) {
   return n;
 }
 
-std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
+std::vector<std::string> &parser::split(const std::string &s, char delim, std::vector<std::string> &elems) {
   std::stringstream ss(s);
   std::string item;
   while (std::getline(ss, item, delim)) {
@@ -94,7 +97,7 @@ std::vector<std::string> &split(const std::string &s, char delim, std::vector<st
   return elems;
 }
 
-std::vector<std::string> split(const std::string &s, char delim) {
+std::vector<std::string> parser::split(const std::string &s, char delim) {
   std::vector<std::string> elems;
   split(s, delim, elems);
   return elems;
