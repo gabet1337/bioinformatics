@@ -23,6 +23,7 @@ typedef std::pair<std::string, std::pair<double,int> > sdi;
 class parser {
 public:
   node* parse(std::string file);
+  node* parse(char* file);
 private:
   node* parsev(std::string x);
   sdi find_match(std::string x);
@@ -50,7 +51,11 @@ sdi parser::find_match(std::string x) {
 }
 
 node* parser::parse(std::string file) {
-  std::ifstream t(file.c_str());
+  return parse(file.c_str());
+}
+
+node* parser::parse(char* file) {
+  std::ifstream t(file);
   std::string str;
   t.seekg(0, std::ios::end);
   str.reserve(t.tellg());
