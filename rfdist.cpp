@@ -1,6 +1,10 @@
 #include "newick_parser.hpp"
 #include <iostream>
+#include <vector>
 using namespace std;
+typedef pair<int,double> PID;
+typedef vector<PID> vid;
+typedef vector<vid> vvid;
 int main(int argc, char *argv[]) {
 
   if (argc != 3) {
@@ -10,6 +14,7 @@ int main(int argc, char *argv[]) {
   }
   parser p;
   cout << "Parsing " << argv[1] << " and " << argv[2] << endl;
+
   node* tree1 = p.parse(argv[1]);
   node* tree2 = p.parse(argv[2]);
 
