@@ -1,5 +1,6 @@
 #include <iostream>
 #include <map>
+#include <queue>
 #include "newick_parser.hpp"
 using namespace std;
 map<node*, int> mni;
@@ -21,10 +22,24 @@ void print(node* n) {
 int main() {
   parser p;
   //cout << p.find_match("(ab(asd)asd):0.00123,(asdad)").second << endl;
-  node* n = p.parse("tree2.new");
+  node* tree1 = p.parse("tree1.new");
+  //find seq3
+  queue<node*> q; q.push(tree1);
+  while (!q.empty()) {
+    node* f = q.front(); q.pop();
+    if (f->name == "seq3") { tree1 = f; break;}
+    for (auto &k : f->adj_list)
+      if (k.first != f) q.push(k.first);
+  }
+  for (int i = 0; i < tree1->adj_list[0].first->adj_list.size(); i++)
+    if (tree1 == tree1->adj_list[0].first->adj_list[i].first) {
+      tree1->adj_list[0].first->adj_list.erase(tree1->adj_list[0].first->adj_list.begin()+i); break;
+    }
+  tree1 = tree1->adj_list[0].first;
+
 
   cout << "digraph g {" << endl;
-  print(n);
+  print(tree1);
   cout << "}" << endl;
 
   return 0;
