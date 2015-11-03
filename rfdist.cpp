@@ -28,29 +28,30 @@ void rename_t2(node* tree, map<node*,int> &visited, map<string, int> &df, map<st
       rename_t2(n.first, visited, df, df2);
 }
 
-void annotate(node* p, node* tree, map<node*,int> &visited, map<string,int> &df, map<node*,ii> &ints, vector<ii> &intervals, map<node*, int> &sizes) {
+void annotate(node* p, node* tree, map<node*,int> &visited, map<string,int> &df, map<node*,ii> &ints, vector<ii> &intervals, map<node*, int> &sizes, int &splits) {
   visited[tree] = 1;
   for (auto &n : tree->adj_list)
     if (visited.find(n.first) == visited.end())
-      annotate(tree, n.first, visited, df, ints, intervals, sizes);
+      annotate(tree, n.first, visited, df, ints, intervals, sizes,splits);
   if (p == 0) return;
   if (df.find(tree->name) != df.end()) {
     ints[tree] = ii(df[tree->name], df[tree->name]);
     sizes[tree] = 1;
-    cout << tree->name << " " << df[tree->name] << endl;
+    // cout << tree->name << " " << df[tree->name] << endl;
   } else {
     //internal node! gather min and max from all children!
     int mi = 1000000, ma = -1000000;
     int s = 0;
     for (auto &n : tree->adj_list) {
-      cout << tree << " " << n.first << endl;
+      // cout << tree << " " << n.first << endl;
       if (n.first != p) {
         s += sizes[n.first];
         mi = min(mi,ints[n.first].first);
         ma = max(ma,ints[n.first].second);
       }
     }
-    cout << mi << " " << ma << " " << s << endl;
+    splits++;
+    // cout << mi << " " << ma << " " << s << endl;
     ints[tree] = ii(mi,ma);
     sizes[tree] = s;
     if (ma-mi+1 == s) intervals.push_back(ii(mi,ma));
@@ -80,7 +81,7 @@ int main(int argc, char *argv[]) {
     for (auto &n : f->adj_list)
       if (n.first != f) q.push(n.first);
   }
-  cout << "tree1 rooted at: " << tree1->name << endl;
+  cout << argv[1] << " rooted at: " << tree1->name << endl;
   //2. find same leaf in tree2 and make that root
   q = queue<node*>();
   q.push(tree2);
@@ -90,7 +91,7 @@ int main(int argc, char *argv[]) {
     for (auto &n : f->adj_list)
       if (n.first != f) q.push(n.first);
   }
-  cout << "tree2 rooted at: " << tree2->name << endl;
+  cout << argv[2] << " rooted at: " << tree2->name << endl;
 
   //remove the root nodes from the trees and make is only child the root:
   for (int i = 0; i < tree1->adj_list[0].first->adj_list.size(); i++)
@@ -117,24 +118,29 @@ int main(int argc, char *argv[]) {
   vector<ii> intervals_t1, intervals_t2;
   visited.clear();
   //void annotate(node* tree, map<node*,int> &visited, map<string,int> &df, map<node*,ii> &ints, vector<ii> &intervals, map<node*, int> &sizes) {
+  int splits_t1 = 0, splits_t2 = 0;
   map<node*,ii> ints;
   map<node*,int> sizes;
-  cout << "annotating tree1" << endl;
-  annotate(0,tree1, visited, df, ints, intervals_t1, sizes);
+  cout << "annotating " << argv[1] << endl;
+  annotate(0,tree1, visited, df, ints, intervals_t1, sizes, splits_t1);
   visited.clear(); ints.clear(); sizes.clear();
-  cout << "annotating tree2" << endl;
-  annotate(0,tree2, visited, df2, ints, intervals_t2, sizes);
+  cout << "annotating " << argv[2] << endl;
+  annotate(0,tree2, visited, df2, ints, intervals_t2, sizes, splits_t2);
 
   sort(intervals_t1.begin(), intervals_t1.end());
   sort(intervals_t2.begin(), intervals_t2.end());
   vector<ii> intersection;
 
-  cout << intervals_t1.size() << endl;
-  cout << intervals_t2.size() << endl;
+  // cout << splits_t1 << " " << splits_t2 << endl;
+
+  // cout << intervals_t1.size() << endl;
+  // cout << intervals_t2.size() << endl;
 
   set_intersection(intervals_t1.begin(), intervals_t1.end(), intervals_t2.begin(), intervals_t2.end(), back_inserter(intersection));
 
-  cout << intersection.size() << endl;
+  // cout << intersection.size() << endl;
+
+  cout << "Robinson-Foulds distance is: " << splits_t1+splits_t2 - 2*intersection.size() << endl;
 
   return 0;
 }
