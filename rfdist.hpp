@@ -16,7 +16,7 @@ typedef std::pair<int,int> ii;
 class rfdist {
 public:
   rfdist();
-  int distance(char* t1, char* t2);
+  int distance(const char* t1, const char* t2);
 private:
   void rename_t1(node* tree, std::map<node*, int> &visited, std::map<std::string, int> &df);
   void rename_t2(node* tree, std::map<node*,int> &visited, std::map<std::string, int> &df, std::map<std::string,int> &df2);
@@ -74,7 +74,7 @@ void rfdist::annotate(node* p, node* tree, std::map<node*,int> &visited, std::ma
   }
 }
 
-int rfdist::distance(char* t1, char* t2) {
+int rfdist::distance(const char* t1, const char* t2) {
   nextid = 0;
   parser p;
   node* tree1 = p.parse(t1);
@@ -91,7 +91,7 @@ int rfdist::distance(char* t1, char* t2) {
       if (n.first != f.second) q.push(std::make_pair(n.first,f.first));
   }
 
-  std::cout << "rooted " << t1 << " in " << tree1->name << std::endl;
+  // std::cout << "rooted " << t1 << " in " << tree1->name << std::endl;
   //2. find same leaf in tree2 and make that root
   q = std::queue<std::pair<node*,node*> >();
   q.push(std::make_pair(tree2,(node*)0));
@@ -102,7 +102,7 @@ int rfdist::distance(char* t1, char* t2) {
       if (n.first != f.second) q.push(std::make_pair(n.first, f.first));
   }
 
-  std::cout << "rooted " << t2 << " in " << tree2->name << std::endl;
+  // std::cout << "rooted " << t2 << " in " << tree2->name << std::endl;
 
   //remove the root nodes from the trees and make is only child the root:
   for (int i = 0; i < tree1->adj_list[0].first->adj_list.size(); i++)
@@ -119,12 +119,12 @@ int rfdist::distance(char* t1, char* t2) {
   //make a depth first numbering of the leaves in T1
   std::map<std::string,int> df;
   std::map<node*, int> visited;
-  std::cout << "renaming " << t1 << std::endl;
+  // std::cout << "renaming " << t1 << std::endl;
   rename_t1(tree1, visited, df);
   //rename the leaves in T2 cf. the df-numbering of leaves in T1
   visited.clear();
   std::map<std::string, int> df2;
-  std::cout << "renaming " << t2 << std::endl;
+  // std::cout << "renaming " << t2 << std::endl;
   rename_t2(tree2, visited, df, df2);
 
   //annotate internal nodes of T1 with their intervals according to DF-numbering
@@ -134,10 +134,10 @@ int rfdist::distance(char* t1, char* t2) {
   int splits_t1 = 0, splits_t2 = 0;
   std::map<node*,ii> ints;
   std::map<node*,int> sizes;
-  std::cout << "annotating " << t1 << std::endl;
+  // std::cout << "annotating " << t1 << std::endl;
   annotate(0,tree1, visited, df, ints, intervals_t1, sizes, splits_t1);
   visited.clear(); ints.clear(); sizes.clear();
-  std::cout << "annotating " << t2 << std::endl;
+  // std::cout << "annotating " << t2 << std::endl;
   annotate(0,tree2, visited, df2, ints, intervals_t2, sizes, splits_t2);
   sort(intervals_t1.begin(), intervals_t1.end());
   sort(intervals_t2.begin(), intervals_t2.end());

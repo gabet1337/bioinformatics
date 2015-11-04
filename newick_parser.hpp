@@ -17,11 +17,6 @@ struct node {
   std::string name;
   std::vector<std::pair<node*,double> > adj_list;
   node() : name("") {}
-  // ~node() {
-  //   for (auto &n : adj_list)
-  //     delete n.first;
-  //   adj_list.clear();
-  // }
 };
 
 typedef std::pair<std::string, std::pair<double,int> > sdi;
@@ -31,13 +26,38 @@ typedef std::vector<vid> vvid;
 class parser {
 public:
   node* parse(std::string file);
-  node* parse(char* file);
+  node* parse(const char* file);
+  std::string parse(node* tree);
 private:
   node* parsev(std::string x);
+  std::string parse(node* p, node* tree);
   sdi find_match(std::string x);
   std::vector<std::string> split(const std::string &s, char delim);
   std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems);
 };
+
+std::string parser::parse(node* tree) {
+  return parse(0, tree) + ";";
+}
+
+std::string parser::parse(node* p, node* tree) {
+  if (tree->adj_list.size() == 1) {
+    std::string res = tree->name;
+    res+=":0.0";
+    return res;
+  }
+  std::string res = "";
+  if (tree->adj_list.size() != 1) res+="(";
+  for (int i = 0; i < tree->adj_list.size(); i++) {
+    auto n = tree->adj_list[i];
+    if (n.first != p) {
+      res+=parse(tree, n.first);
+      if (i!=tree->adj_list.size()-1) {res+=",";}
+    }
+  }
+  if (tree->adj_list.size() != 1) res+=")";
+  return res;
+}
 
 sdi parser::find_match(std::string x) {
   int depth = 1;
@@ -62,7 +82,7 @@ node* parser::parse(std::string file) {
   return parse(file.c_str());
 }
 
-node* parser::parse(char* file) {
+node* parser::parse(const char* file) {
   std::ifstream t(file);
   std::string str;
   t.seekg(0, std::ios::end);
