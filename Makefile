@@ -5,3 +5,6 @@ parser: newick_parser.hpp newick_test.cpp
 
 rfdist: newick_parser.hpp rfdist.cpp
 	$(CC) newick_parser.hpp rfdist.cpp -o rfdist
+
+ex1: newick_parser.hpp rfdist.hpp ex1.cpp
+	$(CC) newick_parser.hpp rfdist.hpp ex1.cpp -o ex1
