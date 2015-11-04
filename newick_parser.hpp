@@ -17,6 +17,11 @@ struct node {
   std::string name;
   std::vector<std::pair<node*,double> > adj_list;
   node() : name("") {}
+  // ~node() {
+  //   for (auto &n : adj_list)
+  //     delete n.first;
+  //   adj_list.clear();
+  // }
 };
 
 typedef std::pair<std::string, std::pair<double,int> > sdi;

@@ -10,10 +10,10 @@ char* files[8] = {"trees/clustalo-rnj.newick", "trees/kalign-rnj.newick",
 
 int main() {
 
-  rfdist rf;
   int dist[8][8];
   for (int i = 0; i < 8; i++)
     for (int j = 0; j < 8; j++) {
+      rfdist rf;
       cout << "Running on " << files[i] << " & " << files[j] << endl;
       dist[i][j] = rf.distance(files[i],files[j]);
     }

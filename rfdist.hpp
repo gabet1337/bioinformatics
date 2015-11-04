@@ -82,24 +82,24 @@ int rfdist::distance(char* t1, char* t2) {
 
   //root the two trees at the same leaf
   //1. find a leaf in tree1 and make that root.
-  std::queue<node*> q;
-  q.push(tree1);
+  std::queue<std::pair<node*,node*> > q;
+  q.push(std::make_pair(tree1,(node*)0));
   while (!q.empty()) {
-    node* f = q.front(); q.pop();
-    if (f->name != "") {tree1 = f; break;}
-    for (auto &n : f->adj_list)
-      if (n.first != f) q.push(n.first);
+    std::pair<node*,node*> f = q.front(); q.pop();
+    if (f.first->name != "") {tree1 = f.first; break;}
+    for (auto &n : f.first->adj_list)
+      if (n.first != f.second) q.push(std::make_pair(n.first,f.first));
   }
 
   std::cout << "rooted " << t1 << " in " << tree1->name << std::endl;
   //2. find same leaf in tree2 and make that root
-  q = std::queue<node*>();
-  q.push(tree2);
+  q = std::queue<std::pair<node*,node*> >();
+  q.push(std::make_pair(tree2,(node*)0));
   while (!q.empty()) {
-    node* f = q.front(); q.pop();
-    if (f->name == tree1->name) {tree2 = f; break;}
-    for (auto &n : f->adj_list)
-      if (n.first != f) q.push(n.first);
+    std::pair<node*,node*> f = q.front(); q.pop();
+    if (f.first->name == tree1->name) {tree2 = f.first; break;}
+    for (auto &n : f.first->adj_list)
+      if (n.first != f.second) q.push(std::make_pair(n.first, f.first));
   }
 
   std::cout << "rooted " << t2 << " in " << tree2->name << std::endl;
