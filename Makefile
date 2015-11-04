@@ -8,3 +8,9 @@ rfdist: newick_parser.hpp rfdist.cpp rfdist.hpp
 
 ex1: newick_parser.hpp rfdist.hpp ex1.cpp
 	$(CC) newick_parser.hpp rfdist.hpp ex1.cpp -o ex1
+
+ex2: newick_parser.hpp rfdist.hpp ex2.cpp
+	$(CC) newick_parser.hpp rfdist.hpp ex2.cpp -o ex2
+
+ex3: newick_parser.hpp rfdist.hpp ex3.cpp
+	$(CC) newick_parser.hpp rfdist.hpp ex3.cpp -o ex3
