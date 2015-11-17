@@ -33,12 +33,17 @@ public:
   node* parse(std::string file);
   node* parse(const char* file);
   std::string parse(node* tree);
+  void print(node* n);
 private:
   node* parsev(std::string x);
+  void print_r(node* n);
   std::string parse(node* p, node* tree);
   sdi find_match(std::string x);
   std::vector<std::string> split(const std::string &s, char delim);
   std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems);
+  std::map<node*, int> mni;
+  int next_id = 0;
+  std::map<node*, int> visited;
 };
 
 std::string parser::parse(node* tree) {
@@ -127,6 +132,29 @@ node* parser::parsev(std::string x) {
     }
   }
   return n;
+}
+
+void parser::print(node* n) {
+  visited.clear();
+  mni.clear();
+  next_id = 0;
+  std::cout << "digraph g {" << std::endl;
+  print_r(n);
+  std::cout << "}" << std::endl;
+}
+
+
+void parser::print_r(node* n) {
+  visited[n] = 1;
+  if (mni.find(n) == mni.end()) mni[n] = next_id++;
+  std::cout << mni[n] << " [label=\"" << n->name << "\"]" << std::endl;
+  for (int i = 0; i < n->adj_list.size(); i++) {
+    if (visited[n->adj_list[i].first]) continue;
+    if (mni.find(n->adj_list[i].first) == mni.end()) mni[n->adj_list[i].first] = next_id++;
+    std::cout << mni[n] << " -> " << mni[n->adj_list[i].first]
+              << " [label=\"" << n->adj_list[i].second << "\"]" << std::endl;
+    print_r(n->adj_list[i].first);
+  }
 }
 
 std::vector<std::string> &parser::split(const std::string &s, char delim, std::vector<std::string> &elems) {
