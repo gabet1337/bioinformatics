@@ -1,11 +1,11 @@
-#include <iostream>
+#include <stdio.h>
 #include "saitou_nei.hpp"
 using namespace std;
 
-int main() {
-
-  saitou_nei sn("phylib/1849_FG-GAP.phy");
-  cout << sn.compute() << endl;
+int main(int argc, char *argv[]) {
+  
+  saitou_nei sn(argv[1]);
+  printf("%s\n", sn.compute().c_str());
 
   return 0;
 

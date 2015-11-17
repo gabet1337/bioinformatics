@@ -22,4 +22,4 @@ pr : phylib_reader.hpp phylib_reader_tester.cpp
 	$(CC) phylib_reader.hpp phylib_reader_tester.cpp -o prt
 
 nj : phylib_reader.hpp saitou_nei.hpp nj_tester.cpp newick_parser.hpp
-	$(CC) newick_parser.hpp phylib_reader.hpp saitou_nei.hpp nj_tester.cpp -o nj
+	$(CC) -fopenmp newick_parser.hpp phylib_reader.hpp saitou_nei.hpp nj_tester.cpp -o nj

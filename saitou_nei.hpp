@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <omp.h>
 
 class saitou_nei {
 
@@ -31,7 +32,7 @@ std::string saitou_nei::compute() {
   std::vector<bool> deleted_col(S,false);
   //construct the starting tree T
   node* center = new node();
-  center->name = "center";
+  // center->name = "center";
   std::vector<node*> leafs(S, 0);
   for (int i = 0; i < S; i++) {
     leafs[i] = new node();
@@ -45,9 +46,11 @@ std::string saitou_nei::compute() {
     //compute the matrix N = (n_ij) where n_ij = d_ij - (r_i + r_j)
     // r_i = 1 / (S-2) * sum(d_im)
     std::vector<double> ris(D.size());
+    double r_i;
+#pragma omp parallel for schedule(dynamic,1) reduction(+ : r_i)
     for (int i = 0; i < D.size(); i++) {
       if (deleted_row[i]) continue;
-      double r_i = 0.0;
+      r_i = 0.0;
       for (int j = 0; j < D.size(); j++) {
         //compute sum of the row:
         if (deleted_col[j]) continue;
@@ -56,18 +59,37 @@ std::string saitou_nei::compute() {
       ris[i] = r_i/(S-2);
       // std::cout << ris[i] << std::endl;
     }
-    //select i,j such that n_ij is minimum in N
+//select i,j such that n_ij is minimum in N
     int best_i = 0, best_j = 0;
     double opti = 1000000000;
+// #pragma omp parallel for reduction(min:opti)
     for (int i = 0; i < D.size(); i++) {
       if (deleted_row[i]) continue;
-      for (int j = 0; j < D.size(); j++) {
-        if (i == j || deleted_col[j]) continue;
-        if (D[i][j] - (ris[i] + ris[j]) < opti) {
-          opti = D[i][j] - (ris[i] + ris[j]);
-          best_i = i;
-          best_j = j;
-        }
+#pragma omp parallel
+      {
+	double priv_opti = 100000000;
+	int priv_best_i = 0;
+	int priv_best_j = 0;
+#pragma omp for
+	for (int j = 0; j < D.size(); j++) {
+	  if (i == j || deleted_col[j]) continue;
+	  if (D[i][j] - (ris[i] + ris[j]) < priv_opti) {
+	    priv_opti = D[i][j] - (ris[i] + ris[j]);
+	    priv_best_i = i;
+	    priv_best_j = j;
+	  }
+	}
+#pragma omp flush (opti)
+	if (priv_opti < opti) {
+	  #pragma omp critical
+	  {
+	    if (priv_opti < opti) {
+	      opti = priv_opti;
+	      best_i = priv_best_i;
+	      best_j = priv_best_j;
+	    }
+	  }
+	}
       }
     }
     // std::cout << "found " << best_i << " & " << best_j
@@ -96,6 +118,7 @@ std::string saitou_nei::compute() {
     deleted_row[best_j] = true;
     deleted_col[best_j] = true;
     leafs[best_i] = k;
+// #pragma omp parallel for schedule(dynamic,1)
     for (int k = 0; k < D.size(); k++) {
       if (!deleted_col[k] && !deleted_row[k]) {
         if (k == best_i) D[k][best_i] = 0.0;
