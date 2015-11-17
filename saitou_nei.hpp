@@ -36,13 +36,12 @@ std::string saitou_nei::compute() {
   for (int i = 0; i < S; i++) {
     leafs[i] = new node();
     leafs[i]->name = l[i];
-    leafs[i]->adj_list.push_back({center, 0.0});
-    center->adj_list.push_back({leafs[i], 0.0});
+    add_edge(leafs[i], center, 0.0);
   }
-  p.print(center);
+  // p.print(center);
 
   while (S > 3) {
-    std::cout << S << std::endl;
+    // std::cout << S << std::endl;
     //compute the matrix N = (n_ij) where n_ij = d_ij - (r_i + r_j)
     // r_i = 1 / (S-2) * sum(d_im)
     std::vector<double> ris(D.size());
@@ -55,7 +54,7 @@ std::string saitou_nei::compute() {
         r_i += D[i][j];
       }
       ris[i] = r_i/(S-2);
-      std::cout << ris[i] << std::endl;
+      // std::cout << ris[i] << std::endl;
     }
     //select i,j such that n_ij is minimum in N
     int best_i = 0, best_j = 0;
@@ -71,12 +70,12 @@ std::string saitou_nei::compute() {
         }
       }
     }
-    std::cout << "found " << best_i << " & " << best_j
-              << " as minimum entry in N with " << opti << std::endl;
+    // std::cout << "found " << best_i << " & " << best_j
+    //           << " as minimum entry in N with " << opti << std::endl;
 
     //add a new node k to the tree T:
     node* k = new node();
-    k->name = ("k"+std::to_string(S));
+    // k->name = ("k"+std::to_string(S));
     //add edges (k,i) and (k,j) with appropriate weights
     node* parent = leafs[best_i]->adj_list[0].first;
     remove_edge(parent, leafs[best_i]);
@@ -86,10 +85,10 @@ std::string saitou_nei::compute() {
     if (parent->adj_list.empty()) delete parent;
     // leafs[best_i]->adj_list.clear();
     // leafs[best_j]->adj_list.clear();
-    add_edge(k, parent, 0);
+    add_edge(k, parent, 0.0);
     add_edge(k,leafs[best_i], 0.5*(D[best_i][best_j] + ris[best_i] - ris[best_j]));
     add_edge(k,leafs[best_j], 0.5*(D[best_i][best_j] + ris[best_j] - ris[best_i]));
-    p.print(k);
+    // p.print(k);
 
     //update the dissimilarity matrix by deleting rows and columns
     //corresponding to i and j and adding a new row and column for the new taxon k
@@ -103,14 +102,14 @@ std::string saitou_nei::compute() {
         else D[best_i][k] = D[k][best_i] = 0.5*(D[best_i][k]+D[best_j][k]-D[best_i][best_j]);
       }
     }
-    for (int i = 0; i < D.size(); i++) {
-      if (deleted_row[i]) continue;
-      for (int j = 0; j < D.size(); j++) {
-        if (deleted_col[j]) continue;
-        std::cout << D[i][j] << "\t";
-      }
-      std::cout << std::endl;
-    }
+    // for (int i = 0; i < D.size(); i++) {
+    //   if (deleted_row[i]) continue;
+    //   for (int j = 0; j < D.size(); j++) {
+    //     if (deleted_col[j]) continue;
+    //     std::cout << D[i][j] << "\t";
+    //   }
+    //   std::cout << std::endl;
+    // }
 
     S--;
   }
@@ -121,13 +120,13 @@ std::string saitou_nei::compute() {
   std::vector<int> remaining;
   for (int i = 0; i < D.size(); i++) {
     if (!deleted_row[i]) {
-      std::cout << i << " " << leafs[i]->name << std::endl;
+      // std::cout << i << " " << leafs[i]->name << std::endl;
       remaining.push_back(i);
     }
   }
   int i = remaining[0], j = remaining[1], m = remaining[2];
   node* v = new node();
-  v->name = "v";
+  // v->name = "v";
   node* parent = leafs[i]->adj_list[0].first;
   remove_edge(parent, leafs[i]);
   remove_edge(parent, leafs[j]);
@@ -139,7 +138,7 @@ std::string saitou_nei::compute() {
   add_edge(v, leafs[i], (D[i][j] + D[i][m] - D[j][m]) / 2.0);
   add_edge(v, leafs[j], (D[i][j] + D[j][m] - D[i][m]) / 2.0);
   add_edge(v, leafs[m], (D[i][m] + D[j][m] - D[i][j]) / 2.0);
-  p.print(v);
+  // p.print(leafs[3]);
   return p.parse(v);
 }
 

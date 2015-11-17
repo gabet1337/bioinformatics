@@ -52,27 +52,23 @@ std::string parser::parse(node* tree) {
 
 std::string parser::parse(node* p, node* tree) {
   if (tree->adj_list.size() == 1) {
-    std::string res = tree->name;
-    res+=(":"+std::to_string(tree->adj_list[0].second));
+    std::string res = tree->name + ":"
+      + std::to_string(tree->adj_list[0].second);;
     return res;
   }
-  std::string res = "";
-  if (tree->adj_list.size() != 1) res+="(";
+  std::string res = "(";
   for (int i = 0; i < tree->adj_list.size(); i++) {
-    auto n = tree->adj_list[i];
-    if (n.first != p) {
-      res+=parse(tree, n.first);
-      std::cout << i << " " << tree->adj_list.size()-1 << std::endl;
-      if (i<tree->adj_list.size()-2) {res+=",";}
+    auto n = tree->adj_list[i].first;
+    if (n != p) {
+      if (i!=0) res+=",";
+      res+=parse(tree, n);
+      // if (i<tree->adj_list.size()-1) {res+=",";}
     }
   }
-  if (tree->adj_list.size() != 1) {
-    res+=")";
-    if (p != 0) {
-      res+= (":"+std::to_string(tree->adj_list[tree->adj_list.size()-1].second));
-    }
+  res+=")";
+  if (p != 0) {
+    res+= (":"+std::to_string(tree->adj_list[tree->adj_list.size()-1].second));
   }
-      
   return res;
 }
 
