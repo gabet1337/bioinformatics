@@ -118,7 +118,7 @@ std::string saitou_nei::compute() {
     deleted_row[best_j] = true;
     deleted_col[best_j] = true;
     leafs[best_i] = k;
-// #pragma omp parallel for schedule(dynamic,1)
+#pragma omp parallel for
     for (int k = 0; k < D.size(); k++) {
       if (!deleted_col[k] && !deleted_row[k]) {
         if (k == best_i) D[k][best_i] = 0.0;
