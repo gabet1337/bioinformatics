@@ -15,13 +15,13 @@ class phylib_reader {
 public:
   phylib_reader();
   ~phylib_reader();
-  std::pair<labels, dist_matrix> read(const char *file);
+  void read(const char *file, labels &l, dist_matrix &dm);
 };
 
 phylib_reader::phylib_reader() {}
 phylib_reader::~phylib_reader() {};
 
-std::pair<labels,dist_matrix> phylib_reader::read(const char *file) {
+void phylib_reader::read(const char *file, labels &l, dist_matrix &dm) {
   int BUFFER_SIZE = 16184;
   char buffer[BUFFER_SIZE];
   std::ifstream in_stream(file);
@@ -30,17 +30,14 @@ std::pair<labels,dist_matrix> phylib_reader::read(const char *file) {
   int N;
   in_stream >> N;
 
-  labels l;
   l.resize(N);
-  dist_matrix dm(N, std::vector<double>(N));
+  dm.assign(N,std::vector<double>(N));
   for (int i = 0; i < N; i++) {
     in_stream >> l[i];
     for (int j = 0; j < N; j++) {
       in_stream >> dm[i][j];
     }
   }
-  l.shrink_to_fit();
-  return {l,dm};
 }
 
 

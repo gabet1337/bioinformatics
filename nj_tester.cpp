@@ -5,7 +5,7 @@ using namespace std;
 int main() {
 
   saitou_nei sn("phylib/example_slide4.phy");
-  sn.compute();
+  cout << sn.compute() << endl;
 
   return 0;
 

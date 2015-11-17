@@ -53,7 +53,7 @@ std::string parser::parse(node* tree) {
 std::string parser::parse(node* p, node* tree) {
   if (tree->adj_list.size() == 1) {
     std::string res = tree->name;
-    res+=":0.0";
+    res+=(":"+std::to_string(tree->adj_list[0].second));
     return res;
   }
   std::string res = "";
@@ -62,10 +62,17 @@ std::string parser::parse(node* p, node* tree) {
     auto n = tree->adj_list[i];
     if (n.first != p) {
       res+=parse(tree, n.first);
-      if (i!=tree->adj_list.size()-1) {res+=",";}
+      std::cout << i << " " << tree->adj_list.size()-1 << std::endl;
+      if (i<tree->adj_list.size()-2) {res+=",";}
     }
   }
-  if (tree->adj_list.size() != 1) res+=")";
+  if (tree->adj_list.size() != 1) {
+    res+=")";
+    if (p != 0) {
+      res+= (":"+std::to_string(tree->adj_list[tree->adj_list.size()-1].second));
+    }
+  }
+      
   return res;
 }
 
@@ -149,7 +156,12 @@ void parser::print_r(node* n) {
   if (mni.find(n) == mni.end()) mni[n] = next_id++;
   std::cout << mni[n] << " [label=\"" << n->name << "\"]" << std::endl;
   for (int i = 0; i < n->adj_list.size(); i++) {
-    if (visited[n->adj_list[i].first]) continue;
+    if (visited[n->adj_list[i].first]) {
+      std::cout << mni[n] << " -> " << mni[n->adj_list[i].first]
+                << " [label=\"" << n->adj_list[i].second << "\"]" << std::endl;
+
+      continue;
+    }
     if (mni.find(n->adj_list[i].first) == mni.end()) mni[n->adj_list[i].first] = next_id++;
     std::cout << mni[n] << " -> " << mni[n->adj_list[i].first]
               << " [label=\"" << n->adj_list[i].second << "\"]" << std::endl;
