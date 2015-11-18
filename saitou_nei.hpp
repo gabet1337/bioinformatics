@@ -16,6 +16,8 @@ public:
 private:
   void add_edge(node* k, node* n, weight_t w);
   void remove_edge(node* p, node *n);
+  void garbage_collect(int S, std::vector<bool> &deleted_row,
+                       std::vector<bool> &deleted_col, std::vector<node*> &leafs);
   dist_matrix D;
   labels l;
 };
@@ -23,6 +25,30 @@ private:
 saitou_nei::saitou_nei(const char *file) {
   phylib_reader pr;
   pr.read(file, l, D);
+}
+
+void saitou_nei::garbage_collect(int S, std::vector<bool> &deleted_row,
+                                 std::vector<bool> &deleted_col, std::vector<node*> &leafs) {
+  // std::cout << "NOW GARBAGE COLLECTING" << std::endl;
+  dist_matrix new_D(S, std::vector<weight_t>(S));
+  std::vector<node*> new_leafs(S,0);
+
+  int row = 0, col = 0;
+  for (int i = 0; i < D.size(); i++) {
+    if (deleted_row[i]) continue;
+    col = 0;
+    for (int j = 0; j < D.size(); j++) {
+      if (deleted_col[j]) continue;
+      new_D[row][col] = D[i][j];
+      col++;
+    }
+    new_leafs[row] = leafs[i];
+    row++;
+  }
+  deleted_row = std::vector<bool>(S,false);
+  deleted_col = std::vector<bool>(S,false);
+  std::swap(new_D, D);
+  std::swap(leafs, new_leafs);
 }
 
 std::string saitou_nei::compute() {
@@ -121,6 +147,7 @@ std::string saitou_nei::compute() {
       }
     }
     S--;
+    if (S < (double)D.size()*0.9 && S > 50) garbage_collect(S, deleted_row, deleted_col, leafs);
   }
 
   // let i,j,m be the remaining three taxa.
