@@ -91,7 +91,6 @@ std::string saitou_nei::compute() {
 	  }
 	}
       }
-
     }
 
     //add a new node k to the tree T:
@@ -104,8 +103,8 @@ std::string saitou_nei::compute() {
     remove_edge(leafs[best_j], parent);
     if (parent->adj_list.empty()) delete parent;
     add_edge(k, parent, 0.0);
-    add_edge(k,leafs[best_i], 0.5*(D[best_i][best_j] + ris[best_i] - ris[best_j]));
-    add_edge(k,leafs[best_j], 0.5*(D[best_i][best_j] + ris[best_j] - ris[best_i]));
+    add_edge(k,leafs[best_i], (D[best_i][best_j] + ris[best_i] - ris[best_j])*0.5);
+    add_edge(k,leafs[best_j], (D[best_i][best_j] + ris[best_j] - ris[best_i])*0.5);
     // p.print(k);
 
     //update the dissimilarity matrix by deleting rows and columns
@@ -143,9 +142,9 @@ std::string saitou_nei::compute() {
   remove_edge(leafs[j], parent);
   remove_edge(leafs[m], parent);
   if (parent->adj_list.empty()) delete parent;
-  add_edge(v, leafs[i], (D[i][j] + D[i][m] - D[j][m]) / 2.0);
-  add_edge(v, leafs[j], (D[i][j] + D[j][m] - D[i][m]) / 2.0);
-  add_edge(v, leafs[m], (D[i][m] + D[j][m] - D[i][j]) / 2.0);
+  add_edge(v, leafs[i], (D[i][j] + D[i][m] - D[j][m]) * 0.5);
+  add_edge(v, leafs[j], (D[i][j] + D[j][m] - D[i][m]) * 0.5);
+  add_edge(v, leafs[m], (D[i][m] + D[j][m] - D[i][j]) * 0.5);
   return p.parse(v);
 }
 
