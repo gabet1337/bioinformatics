@@ -14,7 +14,7 @@ public:
   saitou_nei(const char *file);
   std::string compute();
 private:
-  void add_edge(node* k, node* n, double w);
+  void add_edge(node* k, node* n, weight_t w);
   void remove_edge(node* p, node *n);
   dist_matrix D;
   labels l;
@@ -45,8 +45,8 @@ std::string saitou_nei::compute() {
     // std::cout << S << std::endl;
     //compute the matrix N = (n_ij) where n_ij = d_ij - (r_i + r_j)
     // r_i = 1 / (S-2) * sum(d_im)
-    std::vector<double> ris(D.size());
-    double r_i;
+    std::vector<weight_t> ris(D.size());
+    weight_t r_i;
 #pragma omp parallel for schedule(dynamic,1) reduction(+ : r_i)
     for (int i = 0; i < D.size(); i++) {
       if (deleted_row[i]) continue;
@@ -61,13 +61,13 @@ std::string saitou_nei::compute() {
     }
 //select i,j such that n_ij is minimum in N
     int best_i = 0, best_j = 0;
-    double opti = 1000000000;
+    weight_t opti = 1000000000;
 // #pragma omp parallel for reduction(min:opti)
     for (int i = 0; i < D.size(); i++) {
       if (deleted_row[i]) continue;
 #pragma omp parallel
       {
-	double priv_opti = 100000000;
+	weight_t priv_opti = 100000000;
 	int priv_best_i = 0;
 	int priv_best_j = 0;
 #pragma omp for
@@ -91,13 +91,11 @@ std::string saitou_nei::compute() {
 	  }
 	}
       }
+
     }
-    // std::cout << "found " << best_i << " & " << best_j
-    //           << " as minimum entry in N with " << opti << std::endl;
 
     //add a new node k to the tree T:
     node* k = new node();
-    // k->name = ("k"+std::to_string(S));
     //add edges (k,i) and (k,j) with appropriate weights
     node* parent = leafs[best_i]->adj_list[0].first;
     remove_edge(parent, leafs[best_i]);
@@ -105,8 +103,6 @@ std::string saitou_nei::compute() {
     remove_edge(leafs[best_i], parent);
     remove_edge(leafs[best_j], parent);
     if (parent->adj_list.empty()) delete parent;
-    // leafs[best_i]->adj_list.clear();
-    // leafs[best_j]->adj_list.clear();
     add_edge(k, parent, 0.0);
     add_edge(k,leafs[best_i], 0.5*(D[best_i][best_j] + ris[best_i] - ris[best_j]));
     add_edge(k,leafs[best_j], 0.5*(D[best_i][best_j] + ris[best_j] - ris[best_i]));
@@ -125,15 +121,6 @@ std::string saitou_nei::compute() {
         else D[best_i][k] = D[k][best_i] = 0.5*(D[best_i][k]+D[best_j][k]-D[best_i][best_j]);
       }
     }
-    // for (int i = 0; i < D.size(); i++) {
-    //   if (deleted_row[i]) continue;
-    //   for (int j = 0; j < D.size(); j++) {
-    //     if (deleted_col[j]) continue;
-    //     std::cout << D[i][j] << "\t";
-    //   }
-    //   std::cout << std::endl;
-    // }
-
     S--;
   }
 
@@ -143,13 +130,11 @@ std::string saitou_nei::compute() {
   std::vector<int> remaining;
   for (int i = 0; i < D.size(); i++) {
     if (!deleted_row[i]) {
-      // std::cout << i << " " << leafs[i]->name << std::endl;
       remaining.push_back(i);
     }
   }
   int i = remaining[0], j = remaining[1], m = remaining[2];
   node* v = new node();
-  // v->name = "v";
   node* parent = leafs[i]->adj_list[0].first;
   remove_edge(parent, leafs[i]);
   remove_edge(parent, leafs[j]);
@@ -161,11 +146,10 @@ std::string saitou_nei::compute() {
   add_edge(v, leafs[i], (D[i][j] + D[i][m] - D[j][m]) / 2.0);
   add_edge(v, leafs[j], (D[i][j] + D[j][m] - D[i][m]) / 2.0);
   add_edge(v, leafs[m], (D[i][m] + D[j][m] - D[i][j]) / 2.0);
-  // p.print(leafs[3]);
   return p.parse(v);
 }
 
-void saitou_nei::add_edge(node* k, node* n, double w) {
+void saitou_nei::add_edge(node* k, node* n, weight_t w) {
   k->adj_list.push_back({n,w});
   n->adj_list.push_back({k,w});
 }

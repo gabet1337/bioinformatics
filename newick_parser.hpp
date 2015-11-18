@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <map>
 #include <queue>
+
 struct node {
   std::string name;
   std::vector<std::pair<node*,double> > adj_list;

@@ -7,7 +7,8 @@
 #include <cstdio>
 #include <string>
 #include <vector>
-typedef std::vector<std::vector<double> > dist_matrix;
+typedef double weight_t;
+typedef std::vector<std::vector<weight_t> > dist_matrix;
 typedef std::vector<std::string> labels;
 
 class phylib_reader {
@@ -22,7 +23,7 @@ phylib_reader::phylib_reader() {}
 phylib_reader::~phylib_reader() {};
 
 void phylib_reader::read(const char *file, labels &l, dist_matrix &dm) {
-  int BUFFER_SIZE = 16184;
+  int BUFFER_SIZE = 16384;
   char buffer[BUFFER_SIZE];
   std::ifstream in_stream(file);
   in_stream.rdbuf()->pubsetbuf(buffer, BUFFER_SIZE);
@@ -31,7 +32,7 @@ void phylib_reader::read(const char *file, labels &l, dist_matrix &dm) {
   in_stream >> N;
 
   l.resize(N);
-  dm.assign(N,std::vector<double>(N));
+  dm.assign(N,std::vector<weight_t>(N));
   for (int i = 0; i < N; i++) {
     in_stream >> l[i];
     for (int j = 0; j < N; j++) {

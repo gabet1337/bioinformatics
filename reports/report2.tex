@@ -1,0 +1,90 @@
+\documentclass[a4paper,oneside,article,11pt]{memoir}
+\usepackage{changepage}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+
+\newtheorem*{toprove}{At bevise}
+\newtheorem{mydef}{Definition}
+
+% This font looks so good.
+\usepackage[sc]{mathpazo}
+\usepackage{fancybox}
+% Typesetting pseudo-code
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{multirow}
+% Code comments like [CLRS]
+\renewcommand{\algorithmiccomment}[1]{\makebox[5cm][l]{$\triangleright$ \textit{#1}}}
+\usepackage{framed,graphicx,xcolor}
+\usepackage{listings}
+\usepackage{hyperref}
+
+\usepackage[font={small,it}]{caption}
+
+% Relative references
+\usepackage{varioref}
+
+\usepackage{tikz}
+
+\bibliographystyle{plain}
+
+\title{Bioinformatics - Tree Comparison \\ Project 2}
+\author{Peter Gabrielsen 20114179\\
+Christoffer Hansen 20114637}
+\newcounter{qcounter}
+
+\makeatletter
+\newenvironment{CenteredBox}{% 
+\begin{Sbox}}{% Save the content in a box
+\end{Sbox}\centerline{\parbox{\wd\@Sbox}{\TheSbox}}}% And output it centered
+\makeatother
+
+\begin{document}
+
+\maketitle
+
+\chapter*{Introduction}
+%A short status of your work. Does everything work as expected, or are there any problems or unsolved issues.
+In this project we are going to implement Saitou and Nei's algorithm for Neighbor joining. The aim of the project will be to make it run as fast as possible using different techniques and then compare our fastest implementation against \texttt{RapidNJ} and \texttt{QuickTree}.
+Our implementation works as expected.
+\\\\Code can be found at \url{URL HERE}. %TODO
+
+\pagebreak
+
+\chapter*{Implementation}
+The implementations is done in \texttt{c++}. It compiles using \texttt{make nj} and runs using \texttt{./nj $<$phylib file$>$}.
+We used OpenMP to parallelize our algorithm.
+
+\chapter*{Machine}
+%TODO insert the machinery here!
+
+\chapter*{Results}
+\begin{figure}[H]
+\begin{adjustwidth}{-2.3cm}{}
+\begin{tabular}{l|c|c|c|c|c|c|c|c}
+	& QT & RNJ & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
+89\_Adeno\_E3\_CR1 & 12 & 10 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
+214\_Arena\_glycoprot & 29 & 23 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
+304\_A1\_Propeptide & 50 & 32 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
+401\_DDE & 84 & 47 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
+494\_Astro\_capsid & 123 & 60 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
+608\_Gemini\_AL2 & 205 & 108 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
+777\_Gemini\_V1 & 354 & 143 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
+877\_Glu\_synthase & 511 & 200 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
+1347\_FAINT & 2036 & 508 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
+1493\_Fe-ADH & 2384 & 599 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
+1560\_Ferritin & 2659 & 611 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
+1689\_FGGY\_N & 3184 & 747 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
+1756\_FAD\_binding\_3 & 3616 & 858 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
+1849\_FG-GAP & 4485 & 865 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT)
+\end{tabular}
+\caption{\label{tab:results}Results of all experiments}
+\end{adjustwidth}
+\end{figure}
+
+\bibliography{references}
+
+\end{document}
+
+
