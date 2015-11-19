@@ -25,7 +25,7 @@ private:
 
 saitou_nei::saitou_nei(const char *file) {
   phylib_reader pr;
-  pr.read(file, l, D);
+  pr.read_fast(file, l, D);
 }
 
 void saitou_nei::garbage_collect(int S, std::vector<bool> &deleted_row,
@@ -151,7 +151,7 @@ std::string saitou_nei::compute() {
       }
     }
     S--;
-    if (S < (double)D.size()*0.9 && S > 50) garbage_collect(S, deleted_row, deleted_col, leafs);
+    if (S < (double)D.size()*0.92 && S > 50) garbage_collect(S, deleted_row, deleted_col, leafs);
   }
 
   // let i,j,m be the remaining three taxa.
