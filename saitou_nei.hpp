@@ -16,6 +16,7 @@ public:
 private:
   void add_edge(node* k, node* n, weight_t w);
   void remove_edge(node* p, node *n);
+  void remove_edges(node* p, node** ns, int num);
   void garbage_collect(int S, std::vector<bool> &deleted_row,
                        std::vector<bool> &deleted_col, std::vector<node*> &leafs);
   dist_matrix D;
@@ -123,8 +124,11 @@ std::string saitou_nei::compute() {
     node* k = new node();
     //add edges (k,i) and (k,j) with appropriate weights
     node* parent = leafs[best_i]->adj_list[0].first;
-    remove_edge(parent, leafs[best_i]);
-    remove_edge(parent, leafs[best_j]);
+    node* edges_to_remove[2] = {leafs[best_i], leafs[best_j]};
+    remove_edges(parent, edges_to_remove, 2);
+    // remove_edge(parent, leafs[best_i]);
+    // remove_edge(parent, leafs[best_j]);
+
     remove_edge(leafs[best_i], parent);
     remove_edge(leafs[best_j], parent);
     if (parent->adj_list.empty()) delete parent;
@@ -162,9 +166,12 @@ std::string saitou_nei::compute() {
   int i = remaining[0], j = remaining[1], m = remaining[2];
   node* v = new node();
   node* parent = leafs[i]->adj_list[0].first;
-  remove_edge(parent, leafs[i]);
-  remove_edge(parent, leafs[j]);
-  remove_edge(parent, leafs[m]);
+
+  node* edges_to_remove[3] = {leafs[i], leafs[j], leafs[m]};
+  remove_edges(parent, edges_to_remove, 3);
+  // remove_edge(parent, leafs[i]);
+  // remove_edge(parent, leafs[j]);
+  // remove_edge(parent, leafs[m]);
   remove_edge(leafs[i], parent);
   remove_edge(leafs[j], parent);
   remove_edge(leafs[m], parent);
@@ -186,6 +193,17 @@ void saitou_nei::remove_edge(node* p, node* n) {
       p->adj_list.erase(x);
       break;
     }
+}
+
+void saitou_nei::remove_edges(node* p, node** ns, int num) {
+  int count = 0;
+  for (auto x = p->adj_list.end(); x != p->adj_list.begin(); x--) {
+    for (int i = 0; i < num; i++)
+      if (x->first == ns[i]) {
+	p->adj_list.erase(x);
+	if (++count == num) break;
+      }
+  }
 }
 
 
