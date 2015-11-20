@@ -48,36 +48,47 @@ Christoffer Hansen 20114637}
 %A short status of your work. Does everything work as expected, or are there any problems or unsolved issues.
 In this project we are going to implement Saitou and Nei's algorithm for Neighbor joining. The aim of the project will be to make it run as fast as possible using different techniques and then compare our fastest implementation against \texttt{RapidNJ} and \texttt{QuickTree}.
 Our implementation works as expected.
-\\\\Code can be found at \url{URL HERE}. %TODO
+\\\\Code can be found at \url{https://github.com/gabet1337/bioinformatics}.
 
 \pagebreak
 
 \chapter*{Implementation}
-The implementations is done in \texttt{c++}. It compiles using \texttt{make nj} and runs using \texttt{./nj $<$phylib file$>$}.
-We used OpenMP to parallelize our algorithm.
+The implementations is done in \texttt{c++}. 
 
-\chapter*{Machine}
-%TODO insert the machinery here!
+\subsection*{OpenMP version}
+This version heavily relies on OpenMP to parallelize the naive version of Saitou-Nei's neighbor joining algorithm. The row sums and finding the minimum element in the N matrix is parallelized using OpenMP. When we remove columns and rows we just mark it as deleted and when we have deleted 10\% of the entire matrix we garbage collect the deleted rows and columns and globally rebuild the structure. We tried parallelizing the garbage collection but with a decrease in performance.
 
-\chapter*{Results}
+It compiles using \texttt{make nj} and runs using \texttt{./nj $<$phylib file$>$}.
+
+As seen in~\ref{fig:openmp} our naive implementation with OpenMP parallization runs within a factor of two of QuickTree. These results were found by repeatedly running the programs and average the running time over 10 runs.
+
+\begin{figure}[H]
+\includegraphics[scale=0.5]{../results/running_time_all.png}
+\caption{\label{fig:openmp}Running time of OpenMP version compared to QuickTree and RapidNJ}
+\end{figure}
+
+\subsection*{Machine}
+Running on an i7-3720QM @ 2.60GHz with 4GB ram in a VMWare Ubuntu 14.04 with kernel 3.16.0-50-generic. Compiled with optimization level 3.
+
+\subsection*{Results }
 \begin{figure}[H]
 \begin{adjustwidth}{-2.3cm}{}
 \begin{tabular}{l|c|c|c|c|c|c|c|c}
-	& QT & RNJ & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
-89\_Adeno\_E3\_CR1 & 12 & 10 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
-214\_Arena\_glycoprot & 29 & 23 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
-304\_A1\_Propeptide & 50 & 32 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
-401\_DDE & 84 & 47 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
-494\_Astro\_capsid & 123 & 60 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
-608\_Gemini\_AL2 & 205 & 108 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
-777\_Gemini\_V1 & 354 & 143 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
-877\_Glu\_synthase & 511 & 200 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
-1347\_FAINT & 2036 & 508 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
-1493\_Fe-ADH & 2384 & 599 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
-1560\_Ferritin & 2659 & 611 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
-1689\_FGGY\_N & 3184 & 747 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
-1756\_FAD\_binding\_3 & 3616 & 858 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT) \\\hline
-1849\_FG-GAP & 4485 & 865 & SN & QT/SN & RNJ/SN & RF(QT,SN) & RF(RNJ,SN) & RF(RNJ,QT)
+						& QT 	& RNJ 	& SN		& QT/SN 		& RNJ/SN & RF(QT,SN)	& RF(RNJ,SN) & RF(RNJ,QT) 	\\\hline
+89\_Adeno\_E3\_CR1 		& 5 		& 4 		& 11   	& 0.45	 	& 0.36	 & 18		& 34			 & 30 			\\\hline
+214\_Arena\_glycoprot 	& 19 	& 12 	& 69   	& 0.27 		& 0.27	 & 36		& 50			 & 56 			\\\hline
+304\_A1\_Propeptide 		& 38 	& 20 	& 98   	& 0.39 		& 0.20	 & 38		& 74			 & 78 			\\\hline
+401\_DDE 				& 66 	& 35 	& 150  	& 0.44 		& 0.23	 & 20		& 98			 & 98 			\\\hline
+494\_Astro\_capsid 		& 96 	& 44 	& 244  	& 0.39 		& 0.18	 & 244		& 530		 & 532 			\\\hline
+608\_Gemini\_AL2 		& 161 	& 91 	& 391  	& 0.41	 	& 0.23	 & 16		& 20			 & 20 			\\\hline
+777\_Gemini\_V1 			& 288 	& 123 	& 668  	& 0.43 		& 0.18	 & 148		& 480		 & 494 			\\\hline
+877\_Glu\_synthase 		& 420 	& 178 	& 893  	& 0.47 		& 0.20	 & 34		& 60			 & 54 			\\\hline
+1347\_FAINT 				& 1660 	& 445	& 2570 	& 0.65 		& 0.17	 & 0			& 2			 & 2 			\\\hline
+1493\_Fe-ADH 			& 1919 	& 508 	& 3349 	& 0.57 		& 0.15	 & 10		& 88			 & 92 			\\\hline
+1560\_Ferritin 			& 2177 	& 534 	& 3803 	& 0.57 		& 0.14	 & 40		& 146		 & 152 			\\\hline
+1689\_FGGY\_N 			& 2636 	& 652 	& 4623 	& 0.57 		& 0.14	 & 26		& 104		 & 102 			\\\hline
+1756\_FAD\_binding\_3 	& 2981 	& 720 	& 4890 	& 0.61 		& 0.15	 & 40		& 68			 & 76 			\\\hline
+1849\_FG-GAP 			& 3536 	& 729 	& 5675 	& 0.62 		& 0.13	 & 132		& 282		 & 280
 \end{tabular}
 \caption{\label{tab:results}Results of all experiments}
 \end{adjustwidth}
