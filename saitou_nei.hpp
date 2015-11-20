@@ -34,18 +34,24 @@ void saitou_nei::garbage_collect(int S, std::vector<bool> &deleted_row,
   dist_matrix new_D(S, std::vector<weight_t>(S));
   std::vector<node*> new_leafs(S,0);
 
-  int row = 0, col = 0;
+  int prefix_rows[deleted_row.size()], prefix_cols[deleted_col.size()];
+  prefix_rows[0] = deleted_row[0];
+  prefix_cols[0] = deleted_col[0];
+  for (int i = 1; i < deleted_row.size(); i++) {
+    prefix_rows[i] = prefix_rows[i-1]+deleted_row[i];
+    prefix_cols[i] = prefix_rows[i-1]+deleted_col[i];
+  }
+  #pragma omp parallel
   for (int i = 0; i < D.size(); i++) {
     if (deleted_row[i]) continue;
-    col = 0;
+#pragma omp parallel for schedule(static)
     for (int j = 0; j < D.size(); j++) {
       if (deleted_col[j]) continue;
-      new_D[row][col] = D[i][j];
-      col++;
+      new_D[i-prefix_rows[i]][j-prefix_cols[j]] = D[i][j];
     }
-    new_leafs[row] = leafs[i];
-    row++;
+    new_leafs[i-prefix_rows[i]] = leafs[i];
   }
+
   deleted_row = std::vector<bool>(S,false);
   deleted_col = std::vector<bool>(S,false);
   std::swap(new_D, D);
@@ -74,7 +80,7 @@ std::string saitou_nei::compute() {
     // r_i = 1 / (S-2) * sum(d_im)
     std::vector<weight_t> ris(D.size());
     weight_t r_i;
-#pragma omp parallel for schedule(dynamic,1) reduction(+ : r_i)
+#pragma omp parallel for schedule(static) reduction(+ : r_i)
     for (int i = 0; i < D.size(); i++) {
       if (deleted_row[i]) continue;
       r_i = 0.0;
@@ -151,7 +157,8 @@ std::string saitou_nei::compute() {
       }
     }
     S--;
-    if (S < (double)D.size()*0.92 && S > 50) garbage_collect(S, deleted_row, deleted_col, leafs);
+    //garbage_collect(S, deleted_row, deleted_col, leafs);
+    if (S < (double)D.size()*0.9 && S > 50) garbage_collect(S, deleted_row, deleted_col, leafs);
   }
 
   // let i,j,m be the remaining three taxa.
