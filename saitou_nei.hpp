@@ -17,7 +17,7 @@ private:
   void add_edge(node* k, node* n, weight_t w);
   void remove_edge(node* p, node *n);
   void remove_edges(node* p, node** ns, int num);
-  void garbage_collect(int S, std::vector<bool> &deleted_row,
+  void garbage_collect(const int S, std::vector<bool> &deleted_row,
                        std::vector<bool> &deleted_col, std::vector<node*> &leafs);
   dist_matrix D;
   labels l;
@@ -28,7 +28,7 @@ saitou_nei::saitou_nei(const char *file) {
   pr.read_fast(file, l, D);
 }
 
-void saitou_nei::garbage_collect(int S, std::vector<bool> &deleted_row,
+void saitou_nei::garbage_collect(const int S, std::vector<bool> &deleted_row,
                                  std::vector<bool> &deleted_col, std::vector<node*> &leafs) {
   // std::cout << "NOW GARBAGE COLLECTING" << std::endl;
   dist_matrix new_D(S, std::vector<weight_t>(S));
@@ -42,16 +42,16 @@ void saitou_nei::garbage_collect(int S, std::vector<bool> &deleted_row,
   //   prefix_cols[i] = prefix_rows[i-1]+deleted_col[i];
   // }
   int row = 0, col = 0;
-  for (int i = 0; i < D.size(); i++) {
+  for (int i = 0; i < D.size(); ++i) {
     if (deleted_row[i]) continue;
     col = 0;
-    for (int j = 0; j < D.size(); j++) {
+    for (int j = 0; j < D.size(); ++j) {
       if (deleted_col[j]) continue;
       new_D[row][col] = D[i][j];
-      col++;
+      ++col;
     }
     new_leafs[row] = leafs[i];
-    row++;
+    ++row;
   }
 
   deleted_row = std::vector<bool>(S,false);
@@ -84,10 +84,10 @@ std::string saitou_nei::compute() {
     std::vector<weight_t> ris(D.size());
     weight_t r_i;
 #pragma omp parallel for schedule(dynamic,chunk_size) reduction(+ : r_i)
-    for (int i = 0; i < D.size(); i++) {
+    for (int i = 0; i < D.size(); ++i) {
       if (deleted_row[i]) continue;
       r_i = 0.0;
-      for (int j = 0; j < D.size(); j++) {
+      for (int j = 0; j < D.size(); ++j) {
         //compute sum of the row:
         if (deleted_col[j]) continue;
         r_i += D[i][j];
@@ -99,7 +99,7 @@ std::string saitou_nei::compute() {
     int best_i = 0, best_j = 0;
     weight_t opti = 1000000000;
 // #pragma omp parallel for reduction(min:opti)
-    for (int i = 0; i < D.size(); i++) {
+    for (int i = 0; i < D.size(); ++i) {
       if (deleted_row[i]) continue;
 #pragma omp parallel
       {
@@ -107,7 +107,7 @@ std::string saitou_nei::compute() {
 	int priv_best_i = 0;
 	int priv_best_j = 0;
 #pragma omp for
-	for (int j = 0; j < D.size(); j++) {
+	for (int j = 0; j < D.size(); ++j) {
 	  if (i == j || deleted_col[j]) continue;
 	  if (D[i][j] - (ris[i] + ris[j]) < priv_opti) {
 	    priv_opti = D[i][j] - (ris[i] + ris[j]);
@@ -153,7 +153,7 @@ std::string saitou_nei::compute() {
     deleted_col[best_j] = true;
     leafs[best_i] = k;
 #pragma omp parallel for
-    for (int k = 0; k < D.size(); k++) {
+    for (int k = 0; k < D.size(); ++k) {
       if (!deleted_col[k] && !deleted_row[k]) {
         if (k == best_i) D[k][best_i] = 0.0;
         else D[best_i][k] = D[k][best_i] = 0.5*(D[best_i][k]+D[best_j][k]-D[best_i][best_j]);
@@ -161,14 +161,14 @@ std::string saitou_nei::compute() {
     }
     S--;
     //garbage_collect(S, deleted_row, deleted_col, leafs);
-    if (S < (double)D.size()*0.9 && S > 50) garbage_collect(S, deleted_row, deleted_col, leafs);
+    if (S > 50 && S < (double)D.size()*0.9) garbage_collect(S, deleted_row, deleted_col, leafs);
   }
 
   // let i,j,m be the remaining three taxa.
   // Add a new internal node v to the tree T
   // Add edges (v,i), (v,j) and (v,m) to the Tree T
   std::vector<int> remaining;
-  for (int i = 0; i < D.size(); i++) {
+  for (int i = 0; i < D.size(); ++i) {
     if (!deleted_row[i]) {
       remaining.push_back(i);
     }
@@ -198,7 +198,7 @@ void saitou_nei::add_edge(node* k, node* n, weight_t w) {
 }
 
 void saitou_nei::remove_edge(node* p, node* n) {
-  for (auto x = p->adj_list.begin(); x != p->adj_list.end(); x++)
+  for (auto x = p->adj_list.begin(); x != p->adj_list.end(); ++x)
     if (x->first == n) {
       p->adj_list.erase(x);
       break;
@@ -207,8 +207,8 @@ void saitou_nei::remove_edge(node* p, node* n) {
 
 void saitou_nei::remove_edges(node* p, node** ns, int num) {
   int count = 0;
-  for (auto x = p->adj_list.end(); x != p->adj_list.begin(); x--) {
-    for (int i = 0; i < num; i++)
+  for (auto x = p->adj_list.end(); x != p->adj_list.begin(); --x) {
+    for (int i = 0; i < num; ++i)
       if (x->first == ns[i]) {
 	p->adj_list.erase(x);
 	if (++count == num) break;

@@ -22,7 +22,7 @@ int sizes[14] = {89,214,304,401,494,608,777,877,
 		 1347,1493,1560,1689,1756,1849};
 
 int main() {
-  const int NUMBER_OF_RUNS = 5;
+  const int NUMBER_OF_RUNS = 1;
   test::clock c;
   ofstream qt_o("results/qt.dat");
   ofstream rnj_o("results/rnj.dat");
@@ -30,21 +30,21 @@ int main() {
   for (int i = 0; i < 14; i++) {
     c.start();
     for (int j = 0; j < NUMBER_OF_RUNS; j++) {
-      system(("./quicktree -in m -out t " + files[i]).c_str());
+      system(("./quicktree -in m -out t " + files[i] + " > trees/qt-"+to_string(sizes[i])+".new").c_str());
     }
     c.stop();
     qt_o << sizes[i] << "\t" << c.count()/NUMBER_OF_RUNS << endl;
 
     c.start();
     for (int j = 0; j < NUMBER_OF_RUNS; j++) {
-      system(("./rapidnj -i pd -o t " + files[i]).c_str());
+      system(("./rapidnj -i pd -o t " + files[i] + " > trees/rnj-"+to_string(sizes[i])+".new").c_str());
     }
     c.stop();
     rnj_o << sizes[i] << "\t" << c.count()/NUMBER_OF_RUNS << endl;
 
     c.start();
     for (int j = 0; j < NUMBER_OF_RUNS; j++) {
-      system(("./nj " + files[i]).c_str());
+      system(("./nj " + files[i] + " > trees/MyNJ-"+to_string(sizes[i])+".new").c_str());
     }
     c.stop();
     sn_o << sizes[i] << "\t" << c.count()/NUMBER_OF_RUNS << endl;

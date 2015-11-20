@@ -53,24 +53,23 @@ std::string parser::parse(node* tree) {
 
 std::string parser::parse(node* p, node* tree) {
   if (tree->adj_list.size() == 1) {
-    std::string res = tree->name + ":"
-      + std::to_string(tree->adj_list[0].second);;
-    return res;
+    return tree->name + ":"
+      + std::to_string(tree->adj_list[0].second);
   }
-  std::string res = "(";
+  std::stringstream ss;
+  ss << "(";
   for (int i = 0; i < tree->adj_list.size(); i++) {
     auto n = tree->adj_list[i].first;
     if (n != p) {
-      if (i!=0) res+=",";
-      res+=parse(tree, n);
-      // if (i<tree->adj_list.size()-1) {res+=",";}
+      if (i!=0) ss << ",";
+      ss << parse(tree, n);
     }
   }
-  res+=")";
+  ss << ")";
   if (p != 0) {
-    res+= (":"+std::to_string(tree->adj_list[tree->adj_list.size()-1].second));
+    ss << (":"+std::to_string(tree->adj_list[tree->adj_list.size()-1].second));
   }
-  return res;
+  return ss.str();
 }
 
 sdi parser::find_match(std::string x) {
