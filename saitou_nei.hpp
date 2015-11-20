@@ -34,22 +34,24 @@ void saitou_nei::garbage_collect(int S, std::vector<bool> &deleted_row,
   dist_matrix new_D(S, std::vector<weight_t>(S));
   std::vector<node*> new_leafs(S,0);
 
-  int prefix_rows[deleted_row.size()], prefix_cols[deleted_col.size()];
-  prefix_rows[0] = deleted_row[0];
-  prefix_cols[0] = deleted_col[0];
-  for (int i = 1; i < deleted_row.size(); i++) {
-    prefix_rows[i] = prefix_rows[i-1]+deleted_row[i];
-    prefix_cols[i] = prefix_rows[i-1]+deleted_col[i];
-  }
-  #pragma omp parallel
+  // int prefix_rows[deleted_row.size()], prefix_cols[deleted_col.size()];
+  // prefix_rows[0] = deleted_row[0];
+  // prefix_cols[0] = deleted_col[0];
+  // for (int i = 1; i < deleted_row.size(); i++) {
+  //   prefix_rows[i] = prefix_rows[i-1]+deleted_row[i];
+  //   prefix_cols[i] = prefix_rows[i-1]+deleted_col[i];
+  // }
+  int row = 0, col = 0;
   for (int i = 0; i < D.size(); i++) {
     if (deleted_row[i]) continue;
-#pragma omp parallel for schedule(static)
+    col = 0;
     for (int j = 0; j < D.size(); j++) {
       if (deleted_col[j]) continue;
-      new_D[i-prefix_rows[i]][j-prefix_cols[j]] = D[i][j];
+      new_D[row][col] = D[i][j];
+      col++;
     }
-    new_leafs[i-prefix_rows[i]] = leafs[i];
+    new_leafs[row] = leafs[i];
+    row++;
   }
 
   deleted_row = std::vector<bool>(S,false);
@@ -78,9 +80,10 @@ std::string saitou_nei::compute() {
     // std::cout << S << std::endl;
     //compute the matrix N = (n_ij) where n_ij = d_ij - (r_i + r_j)
     // r_i = 1 / (S-2) * sum(d_im)
+    int chunk_size = D.size()/8;
     std::vector<weight_t> ris(D.size());
     weight_t r_i;
-#pragma omp parallel for schedule(static) reduction(+ : r_i)
+#pragma omp parallel for schedule(dynamic,chunk_size) reduction(+ : r_i)
     for (int i = 0; i < D.size(); i++) {
       if (deleted_row[i]) continue;
       r_i = 0.0;

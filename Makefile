@@ -1,4 +1,4 @@
-CC = c++ -std=c++11 -g -O3
+CC = c++ -std=c++11 -O3 -g
 
 parser: newick_parser.hpp newick_test.cpp
 	$(CC) newick_parser.hpp newick_test.cpp -o newick_test
@@ -29,3 +29,7 @@ nj : phylib_reader.hpp saitou_nei.hpp nj.cpp newick_parser.hpp
 
 cpa : phylib_reader.hpp saitou_nei.hpp newick_parser.hpp test_lib.hpp rfdist.hpp compare_nj.cpp
 	$(CC) -fopenmp phylib_reader.hpp saitou_nei.hpp newick_parser.hpp test_lib.hpp rfdist.hpp compare_nj.cpp -o cpa
+
+
+crf : newick_parser.hpp rfdist.hpp compare_rfdist.cpp
+	$(CC) newick_parser.hpp rfdist.hpp compare_rfdist.cpp -o crf
