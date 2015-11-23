@@ -103,7 +103,7 @@ void phylib_reader::read_self(const char *file, labels &l, dist_matrix &dm) {
     skip_ws(data, tidx);
     while ( !ws(data[tidx]) ) { buffer[i++] = data[tidx++]; }
     buffer[i] = '\0';
-    l[i] = std::string(buffer);
+    l[row] = std::string(buffer);
     for (unsigned int col = 0; col < N; ++col) {
       i = 0;
       skip_ws(data, tidx);
@@ -113,6 +113,12 @@ void phylib_reader::read_self(const char *file, labels &l, dist_matrix &dm) {
     }
   }
   dm[N-1].resize(N);
+  i = 0;
+  skip_ws(data, tidx);
+  while ( !ws(data[tidx]) ) { buffer[i++] = data[tidx++]; }
+  buffer[i] = '\0';
+  l[N-1] = std::string(buffer);
+
   for (unsigned int col = 0; col < N-1; ++col) {
     i = 0;
     skip_ws(data, tidx);
@@ -126,8 +132,16 @@ void phylib_reader::read_self(const char *file, labels &l, dist_matrix &dm) {
   buffer[i] = '\0';
   dm[N-1][N-1] = atof(buffer);
 
-  // exit(0);
 
+  // for (i = 0; i < N; i++) {
+  //   std::cout << l[i] << " ";
+  //   for (int j = 0; j < N; j++) {
+  //     std::cout << dm[i][j] << " ";
+  //   }
+  //   std::cout << std::endl;
+  // }
+  // exit(0);
+  close(fd);
   munmap(data, stat_buf.st_size);
 }
 

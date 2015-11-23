@@ -34,29 +34,6 @@ void saitou_nei::garbage_collect(const int S, std::vector<bool> &deleted_row,
   dist_matrix new_D(S, std::vector<weight_t>(S));
   std::vector<node*> new_leafs(S);
 
-//   unsigned int prefix_rows[deleted_row.size()], prefix_cols[deleted_col.size()];
-//   prefix_rows[0] = deleted_row[0];
-//   prefix_cols[0] = deleted_col[0];
-//   unsigned int size = D.size();  
-//   for (unsigned int i = 1; i < size; ++i) {
-//     prefix_rows[i] = prefix_rows[i-1]+deleted_row[i];
-//     prefix_cols[i] = prefix_rows[i-1]+deleted_col[i];
-//   }
-
-// #pragma parallel for
-//   for (unsigned int i = 0; i < size; ++i) {
-//     if (!deleted_row[i]) {
-//       unsigned row = i-prefix_rows[i];
-// #pragma parallel for
-//       for (unsigned int j = 0; j < size; ++j) {
-// 	if (!deleted_col[j]) {
-// 	  new_D[row][j-prefix_cols[j]] = D[i][j];
-// 	}
-//       }
-//       new_leafs[row] = leafs[i];
-//     }
-//   }
-
   unsigned int row = 0, col = 0, size = D.size();
   for (unsigned int i = 0; i < size; ++i) {
     if (deleted_row[i]) continue;
@@ -80,7 +57,8 @@ void saitou_nei::garbage_collect(const int S, std::vector<bool> &deleted_row,
 std::string saitou_nei::compute() {
   unsigned int S = l.size();
   unsigned int threshold = 0.9*(double)S;
-  unsigned int chunk_size = S/32;
+  unsigned int chunk_size = std::max((int)(S/32), 4);
+  // std::cout << chunk_size << std::endl;
   unsigned int Dsize = D.size();
   
   std::vector<bool> deleted_row(S,false);
@@ -99,13 +77,11 @@ std::string saitou_nei::compute() {
   // p.print(center);
 
   while (S > 3) {
-    // std::cout << S << std::endl;
     //compute the matrix N = (n_ij) where n_ij = d_ij - (r_i + r_j)
     // r_i = 1 / (S-2) * sum(d_im)
-
     std::vector<weight_t> ris(Dsize);
     weight_t r_i;
-#pragma omp parallel for schedule(dynamic,chunk_size) reduction(+ : r_i)
+#pragma omp parallel for schedule(guided,chunk_size) reduction(+ : r_i)
     for (unsigned int i = 0; i < Dsize; ++i) {
       if (deleted_row[i]) continue;
       r_i = 0.0;
@@ -118,7 +94,6 @@ std::string saitou_nei::compute() {
     //select i,j such that n_ij is minimum in N
     unsigned int best_i = 0, best_j = 0;
     weight_t opti = 1000000000;
-
     for (unsigned int i = 0; i < Dsize; ++i) {
       if (deleted_row[i]) continue;
 #pragma omp parallel
@@ -180,12 +155,14 @@ std::string saitou_nei::compute() {
       }
     }
     --S;
+
     if (S > 50 && S < threshold) {
       garbage_collect(S, deleted_row, deleted_col, leafs);
       threshold = 0.9*(double)S;
-      chunk_size = S/8;
+      chunk_size = std::max((int)(S/32), 8);
       Dsize = D.size();
     }
+
   }
 
   // let i,j,m be the remaining three taxa.
