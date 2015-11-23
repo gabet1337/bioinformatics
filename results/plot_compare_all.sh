@@ -15,7 +15,7 @@ set grid xtics lc rgb "#bbbbbb" lw 1 lt 0
 #set logscale y 2
 #set format x "2^{%L}"
 set key left top
-plot "sn.dat" using 1:($2/($1**1)) ls 1 with linespoints title 'Saitou-Nei naive openmp' ,\
-"rnj.dat" using 1:($2/($1**1)) ls 2 with linespoints title 'RapidNJ' ,\
-"qt.dat" using 1:($2/($1**1)) ls 3 with linespoints title 'QuickTree'
+plot "sn.dat" using 1:($2/($1**0)) ls 1 with linespoints title 'Saitou-Nei naive openmp' ,\
+"rnj.dat" using 1:($2/($1**0)) ls 2 with linespoints title 'RapidNJ' ,\
+"qt.dat" using 1:($2/($1**0)) ls 3 with linespoints title 'QuickTree'
 
