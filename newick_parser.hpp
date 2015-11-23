@@ -58,7 +58,7 @@ std::string parser::parse(node* p, node* tree) {
   }
   std::stringstream ss;
   ss << "(";
-  for (int i = 0; i < tree->adj_list.size(); i++) {
+  for (unsigned int i = 0; i < tree->adj_list.size(); ++i) {
     auto n = tree->adj_list[i].first;
     if (n != p) {
       if (i!=0) ss << ",";
@@ -67,7 +67,7 @@ std::string parser::parse(node* p, node* tree) {
   }
   ss << ")";
   if (p != 0) {
-    ss << (":"+std::to_string(tree->adj_list[tree->adj_list.size()-1].second));
+    ss << (":"+std::to_string(tree->adj_list.back().second));
   }
   return ss.str();
 }

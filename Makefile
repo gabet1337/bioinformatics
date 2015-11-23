@@ -25,7 +25,7 @@ njt : phylib_reader.hpp saitou_nei.hpp nj_tester.cpp newick_parser.hpp test_lib.
 	$(CC) -fopenmp test_lib.hpp newick_parser.hpp phylib_reader.hpp saitou_nei.hpp nj_tester.cpp -o nj
 
 nj : phylib_reader.hpp saitou_nei.hpp nj.cpp newick_parser.hpp
-	$(CC) -fopenmp newick_parser.hpp phylib_reader.hpp saitou_nei.hpp nj.cpp -o nj
+	$(CC) -L/usr/lib/x86_64-linux-gnu/ -fopenmp newick_parser.hpp phylib_reader.hpp saitou_nei.hpp nj.cpp -o nj -lboost_iostreams
 
 cpa : phylib_reader.hpp saitou_nei.hpp newick_parser.hpp test_lib.hpp rfdist.hpp compare_nj.cpp
 	$(CC) -fopenmp phylib_reader.hpp saitou_nei.hpp newick_parser.hpp test_lib.hpp rfdist.hpp compare_nj.cpp -o cpa
