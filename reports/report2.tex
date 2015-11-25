@@ -54,6 +54,7 @@ Our implementation works as expected.
 
 \chapter*{Implementation}
 The implementations is done in \texttt{c++}. 
+We implemented two different ideas; one naive with heave parallelization and one using the idea from the RapidNJ paper.
 
 \subsection*{OpenMP version}
 This version heavily relies on OpenMP to parallelize the naive version of Saitou-Nei's neighbor joining algorithm. The row sums and finding the minimum element in the N matrix is parallelized using OpenMP. When we remove columns and rows we just mark it as deleted and when we have deleted 10\% of the entire matrix we garbage collect the deleted rows and columns and globally rebuild the structure. We tried parallelizing the garbage collection but with a decrease in performance.
@@ -93,6 +94,13 @@ Running on an i7-3720QM @ 2.60GHz with 4GB ram in a VMWare Ubuntu 14.04 with ker
 \caption{\label{tab:results}Results of all experiments}
 \end{adjustwidth}
 \end{figure}
+
+\subsection*{RapidNJ idea}
+%TODO Christoffer adds results for his implementation here!
+
+
+\chapter*{Conclusion}
+We were able to come within a factor of $0.6$ of QuickTree while RapidNJ becomes more and more fast compared to our implementation utilizing OpenMP.
 
 \bibliography{references}
 
