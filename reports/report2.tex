@@ -47,7 +47,7 @@ Christoffer Hansen 20114637}
 \chapter*{Introduction}
 %A short status of your work. Does everything work as expected, or are there any problems or unsolved issues.
 In this project we are going to implement Saitou and Nei's algorithm for Neighbor joining. The aim of the project will be to make it run as fast as possible using different techniques and then compare our fastest implementation against \texttt{RapidNJ} and \texttt{QuickTree}.
-Our implementation works as expected.
+Our implementation works as expected, but for one of our implementations we did not get as good a running time as expected.
 \\\\Code can be found at \url{https://github.com/gabet1337/bioinformatics}.
 
 \pagebreak
@@ -96,11 +96,10 @@ Running on an i7-3720QM @ 2.60GHz with 4GB ram in a VMWare Ubuntu 14.04 with ker
 \end{figure}
 
 \subsection*{RapidNJ idea}
-%TODO Christoffer adds results for his implementation here!
-
+We decided to implement Saitou-Nei's algorithm (SN) using the RapidNJ search heuristic to speed-up the computations of the neighbour-joining method. Even though we did a naive implementation of the algorithm, using no clever way of computing row sums and reuse the distance matrix, we would have expected that the heuristic would have provided a significant speed-up compared against the standard SN algorithm. This was not what we saw when testing, as we achieved a running time of more than 19 minutes on 1849 taxons. We suspected the implementation to be buggy with respect to the pruning of the computations, but running the implementation on small examples and tracking the actual pruning being done, gave no such evidence. Furthermore we were able to test correctness of our implementation against both QT and RNJ against large test-input (using RF-distance as measure), so the best we can conclude is that the implementation must have been buggy in other parts than the pruning step.
 
 \chapter*{Conclusion}
-We were able to come within a factor of $0.6$ of QuickTree while RapidNJ becomes more and more fast compared to our implementation utilizing OpenMP.
+We did not manage to achieve a competing implementation using the \textit{clean} RapidNJ idea. We were able to come within a factor of $0.6$ of QuickTree while RapidNJ becomes more and more fast compared to our implementation utilizing OpenMP.
 
 \bibliography{references}
 
