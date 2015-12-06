@@ -33,3 +33,6 @@ cpa : phylib_reader.hpp saitou_nei.hpp newick_parser.hpp test_lib.hpp rfdist.hpp
 
 crf : newick_parser.hpp rfdist.hpp compare_rfdist.cpp
 	$(CC) newick_parser.hpp rfdist.hpp compare_rfdist.cpp -o crf
+
+hpbf : hp_bf.cpp
+	$(CC) hp_bf.cpp -o hpbf
