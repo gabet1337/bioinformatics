@@ -35,3 +35,6 @@ hpf : approx_hpfold.cpp
 
 crf : newick_parser.hpp rfdist.hpp compare_rfdist.cpp
 	$(CC) newick_parser.hpp rfdist.hpp compare_rfdist.cpp -o crf
+
+hpbf : hp_bf.cpp
+	$(CC) hp_bf.cpp -o hpbf

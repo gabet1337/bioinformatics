@@ -1,0 +1,116 @@
+\documentclass[a4paper,oneside,article,11pt]{memoir}
+\usepackage{changepage}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+
+\newtheorem*{toprove}{At bevise}
+\newtheorem{mydef}{Definition}
+
+% This font looks so good.
+\usepackage[sc]{mathpazo}
+\usepackage{fancybox}
+% Typesetting pseudo-code
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{multirow}
+% Code comments like [CLRS]
+\renewcommand{\algorithmiccomment}[1]{\makebox[5cm][l]{$\triangleright$ \textit{#1}}}
+\usepackage{framed,graphicx,xcolor}
+\usepackage{listings}
+\usepackage{hyperref}
+
+\usepackage[font={small,it}]{caption}
+
+% Relative references
+\usepackage{varioref}
+
+\usepackage{tikz}
+
+\bibliographystyle{plain}
+
+\title{Bioinformatics - Tree Comparison \\ Project 3}
+\author{Peter Gabrielsen 20114179\\
+Christoffer Hansen 20114637}
+\newcounter{qcounter}
+
+\begin{document}
+\maketitle
+
+\chapter*{Approximation algorithm}
+You guys know the algorithm...
+\chapter*{Our folding approach}
+\subsection*{Bruteforce for $n < 20$}
+\begin{algorithm}[H]
+\caption{\textsc{Bruteforce}}
+\begin{algorithmic}[1]
+	\FORALL{possible foldings $x$}
+		\IF{ $x$ is valid folding}
+			\STATE{get score of folding}
+			\IF{score is the best}
+				\STATE{store the path and score}
+			\ENDIF
+		\ENDIF
+	\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
+\subsection*{Sampling for $n \geq 20$}
+\begin{algorithm}[H]
+\caption{\textsc{Sampling with DFS}}
+\begin{algorithmic}[1]
+	\WHILE{long time is not long anymore}
+		\STATE{generate valid random folding using DFS}
+		\STATE{get score of folding}
+		\IF{score is the best}
+			\STATE{store the path and score}
+		\ENDIF
+	\ENDWHILE
+\end{algorithmic}
+\end{algorithm}
+\clearpage
+
+\chapter*{Results}
+\subsection*{Approximation}
+\begin{tabular}{l|c|c|c}
+	& score	& time	& fold \\\hline
+1	& x		& x		& x	\\\hline
+2	& x		& x		& x	\\\hline
+3	& x		& x		& x	\\\hline
+4	& x		& x		& x	\\\hline
+5	& x		& x		& x	\\\hline
+6	& x		& x		& x	\\\hline
+7	& x		& x		& x	\\\hline
+8	& x		& x		& x	\\\hline
+9	& x		& x		& x	\\\hline
+10	& x		& x		& x	\\\hline
+11	& x		& x		& x	\\\hline
+12	& x		& x		& x	\\\hline
+13	& x		& x		& x	\\\hline
+14	& x		& x		& x	\\\hline
+15	& x		& x		& x	\\
+\end{tabular}
+
+\subsection*{Bruteforce and Sampling}
+\begin{tabular}{l|c|c|c}
+	& score & time	& fold \\\hline
+1	& -4	& x		& nwsseeneenwwnnwsw	\\\hline
+2	& -8	& x		& nwnwswwssenessenn	\\\hline
+3	& -9	& x		& nwneneneessswwnen	\\\hline
+4	& -9	& x		& nwwseswssenenesennw \\\hline
+5	& -10	& x		& nwwseseenenwnwnwwse \\\hline
+6	& x		& x		& x	\\\hline
+7	& x		& x		& x	\\\hline
+8	& x		& x		& x	\\\hline
+9	& x		& x		& x	\\\hline
+10	& x		& x		& x	\\\hline
+11	& x		& x		& x	\\\hline
+12	& x		& x		& x	\\\hline
+13	& x		& x		& x	\\\hline
+14	& x		& x		& x	\\\hline
+15	& x		& x		& x	\\
+\end{tabular}
+
+\end{document}
+
+
