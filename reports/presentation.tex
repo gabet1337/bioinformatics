@@ -37,8 +37,325 @@ Christoffer Hansen 20114637}
 \begin{document}
 \maketitle
 
-\chapter*{Approximation algorithm}
-You guys know the algorithm...
+\chapter*{1/4 Approximation - Results}
+
+\section*{hp-string 1}
+\begin{lstlisting}
+hhppppphhppphppphp
+flfrrflffrrflrrlf
+
+.   p - p   .   .   .
+    |   |
+.   p   p   .   .   .
+    |   |
+h - H   p - H - h - p
+    *       *       |
+p - h - p   h - p - p
+        |   |
+.   .   p - p   .   .
+
+Score: 2
+\end{lstlisting}
+
+\pagebreak
+
+\section*{hp-string 2}
+\begin{lstlisting}
+hphphhhppphhhhpphh
+fffffffrrfffflrrl
+
+h - p - h - p - h - H - h - p
+*       *       *   *       |
+H - h * H - h - H - h - p - p
+    |   |
+.   p - p   .   .   .   .   .
+
+Score: 5
+\end{lstlisting}
+
+\section*{hp-string 3}
+\begin{lstlisting}
+phpphphhhphhphhhhh
+ffffffffffrrfffff
+
+p - H - p - p - h - p - h - H - h - p - h
+                *       *   *   *       |
+.   .   .   .   H - h - H - h - H - p - H
+
+Score: 4
+\end{lstlisting}
+
+\section*{hp-string 4}
+\begin{lstlisting}
+hphpphhphpphphhpphph
+fflrrlfffrrfflrrlff
+
+.   .   p - p   .   .   .   .
+        |   |
+h - p - h * H - h - p - h - p
+*       *       *       *   |
+H - p - H - p   H - p - H - p
+            |   |
+.   .   .   p - h   .   .   .
+
+Score: 5
+\end{lstlisting}
+
+\pagebreak
+
+\section*{hp-string 5}
+\begin{lstlisting}
+hhhpphphphpphphphpph
+flrrlffffrrffffffff
+
+.   .   .   h - p   .   .   .   .   .
+            |   |
+.   .   h - H   p - H - p - H - p - H
+            *       *       *       |
+H - p - p - h - p - h - p - h - p - p
+
+Score: 3
+\end{lstlisting}
+
+\section*{hp-string 6}
+\begin{lstlisting}
+hhpphpphpphpphpphpphpphh
+lrrllfrrflfrrlfrrfllrrl
+
+.   .   p - H   .   .
+        |   |
+H - p   p   p   .   .
+|   |   |   |
+h   p - h   p - h - p
+*       *       *   |
+H - h * H - p   H - p
+    |   |   |   |
+.   p - p   p   p   .
+            |   |
+.   .   .   h - p   .
+
+Score: 4
+\end{lstlisting}
+
+\pagebreak
+
+\section*{hp-string 7}
+\begin{lstlisting}
+pphpphhpppphhpppphhpppphh
+ffffflfrrflfffrrfflfrrfl
+
+.   .   .   .   .   p - p   .   .   .   .
+                    |   |
+.   .   .   .   .   h   p   .   .   .   .
+                    |   |
+p - p - h - p - p - H   p - H - h - p - p
+                    *       *   *       |
+.   .   .   .   .   h - H * h - H - p - p
+                        |   |
+.   .   .   .   .   .   p   p   .   .   .
+                        |   |
+.   .   .   .   .   .   p - p   .   .   .
+
+Score: 4
+\end{lstlisting}
+
+\section*{hp-string 8}
+\begin{lstlisting}
+ppphhpphhppppphhhhhhhpphhpppphhpphpp
+ffflrrllffrrfflffrrfflrrllfrrflffff
+
+.   .   .   .   .   .   .   p - p   .   .   .
+                            |   |
+.   .   .   .   .   .   .   p   p   .   .   .
+                            |   |
+.   .   .   .   .   h - p   h   p   .   .   .
+                    |   |   |   |
+.   .   p - p - p - H   p - H * h - H - h - H
+                    *       *       *   *   |
+p - p - H - p - p - h   p - h   p - h - H - h
+                    |   |   |   |
+.   .   .   .   .   H   p   H - p   .   .   .
+                    |   |
+.   .   .   .   .   p - p   .   .   .   .   .
+
+Score: 5
+\end{lstlisting}
+
+\pagebreak
+
+\section*{hp-string 9}
+\begin{lstlisting}
+pphpphhpphhppppphhhhhhhhhhpppppphhpphhpphpphhhhh
+fflrrllrrllfrrflffffffrrfflffrrffllrrllfrrflfff
+
+.   .   .   .   .   .   p - p   .   .   .   .   .   .   .
+                        |   |
+.   .   p - p   p - p   p   p   .   .   .   .   .   .   .
+        |   |   |   |   |   |
+p - p - h * H - h * H - h   p - h - H - h - H - h - H - h
+        *   *   *   *   *       *       *       *   *   |
+.   .   H - h - H - h - H   p - H   p - H   p - H - h - H
+                        |   |   |   |   |   |
+.   .   .   .   .   .   p   p   h - p   h   p   .   .   .
+                        |   |           |   |
+.   .   .   .   .   .   p - h   .   .   p   p   .   .   .
+                                        |   |
+.   .   .   .   .   .   .   .   .   .   p - p   .   .   .
+
+Score: 11
+\end{lstlisting}
+
+\section*{hp-string 10}
+\begin{lstlisting}
+hhphphphphhhhphppphppphpppphppphppphphhhhphphphphh
+ffffffffffffffffffffffffrrfffffffffffffffffffffff
+\end{lstlisting}
+\begin{lstlisting}[basicstyle=\fontsize{6}{11}\ttfamily]
+h - H - p - H - p - H - p - H - p - H - h - H - h - p - h - p - p - p - h - p - p - p - h - p - p
+*   *       *       *       *       *   *   *   *       *               *               *       |
+H - h - p - h - p - h - p - h - p - h - H - h - H - p - H - p - p - p - H - p - p - p - H - p - p
+\end{lstlisting}
+\begin{lstlisting}
+Score: 12
+\end{lstlisting}
+
+\pagebreak
+
+\section*{hp-string 11}
+\begin{lstlisting}
+pphhhphhhhhhhhppphhhhhhhhhhphppphhhhhhhhhhhhpppphhhhhhphhphp
+ffflrrlfffffflrrlffffffffffffrrffffffffffflfrrflfffflrrlfff
+\end{lstlisting}
+\begin{lstlisting}[basicstyle=\fontsize{6}{11}\ttfamily]
+.   .   .   h - p   .   .   .   .   .   .   p - p   .   .   .   .   .   .   .   .   .   .   .   .   .
+            |   |                           |   |
+p - p - h - H * h - H - h - H - h - H - h - H   p - H - h - H - h - H - h - H - h - H - h - p - h - p
+            *       *   *   *   *   *   *   *       *   *   *   *   *   *   *   *   *   *           |
+.   .   p - h - p - h - H * h - H - h - H - h - p   h - H - h - H - h - H - h - H - h - H - h - p - p
+                        |   |                   |   |
+.   .   .   .   .   .   p - H   .   .   .   .   p   H   .   .   .   .   .   .   .   .   .   .   .   .
+                                                |   |
+.   .   .   .   .   .   .   .   .   .   .   .   p - p   .   .   .   .   .   .   .   .   .   .   .   .
+\end{lstlisting}
+
+\begin{lstlisting}
+Score: 20
+\end{lstlisting}
+
+\section*{hp-string 12}
+\begin{lstlisting}
+hhhhhhhhhhhhphphpphhpphhpphpphhpphhpphpphhpphhpphphphhhhhhhhhhhh
+ffffffffffffffflrrllrrllfrrflffrrflfrrfllrrllrrlfffffffffffffff
+\end{lstlisting}
+\begin{lstlisting}[basicstyle=\fontsize{6}{11}\ttfamily]
+.   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   p - h   .   .   .
+                                                                            |   |
+.   .   .   .   .   .   .   .   .   .   .   .   .   .   .   p - p   p - p   p   p   .   .   .
+                                                            |   |   |   |   |   |
+h - H - h - H - h - H - h - H - h - H - h - H - p - H - p - H * h - H * h - H   p - H - h - p
+*   *   *   *   *   *   *   *   *   *   *   *       *       *       *       *       *   *   |
+H - h - H - h - H - h - H - h - H - h - H - h - p - h - p - h - p   h - p   h - p   h - H - p
+                                                                |   |   |   |   |   |
+.   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   p - H   p - H   p   p   .   .
+                                                                                |   |
+.   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   H - p   .   .
+\end{lstlisting}
+\begin{lstlisting}
+Score: 20
+\end{lstlisting}
+
+\pagebreak
+
+\section*{hp-string 13}
+\begin{lstlisting}[basicstyle=\fontsize{7}{11}\ttfamily]
+hhhhpppphhhhhhhhhhhhpppppphhhhhhhhhhhhppphhhhhhhhhhhhppphhhhhhhhhhhhppphpphhpphhpphph
+ffflfrrflfffffffffflffrrfflfffffffffflrrlfrrfffffffflrrlfffffffffflffrrffllrrllrrlff
+\end{lstlisting}
+\begin{lstlisting}[basicstyle=\fontsize{1}{11}\ttfamily]
+.   .   .   .   .   .   .   .   .   .   .   .   .   .   .   p - p   .   .   .   .   .   .   .   .   .   .   .   .   .   .
+                                                            |   |
+.   .   .   p - p   .   .   .   .   .   .   .   .   .   .   p   p   .   .   .   .   .   .   .   .   .   .   .   .   .   .
+            |   |                                           |   |
+.   .   .   p   p   .   .   .   .   .   .   .   .   .   .   p   p   .   .   .   .   .   .   .   .   .   .   p - p   .   .
+            |   |                                           |   |                                           |   |
+h - H - h - H * h - H - h - H - h - H - h - H - h - H - h - H * h - H - h - H - h - H - h - H - h - H - h - H   p - H - h
+    *       *       *       *       *   *   *   *   *   *   *   *   *   *   *       *   *   *   *   *   *   *       *   |
+.   h - p - h - p   h - p   h - p   h - H - h - H - h - H - h - H - h - H - h - p   h - H - h - H - h - H - h - H - h - H
+                |   |   |   |   |   |                                           |   |
+.   .   .   .   p - H   p - H   p   H   .   .   .   .   .   .   .   .   .   .   p - p   .   .   .   .   .   .   .   .   .
+                                |   |
+.   .   .   .   .   .   .   .   H   p   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .
+                                |   |
+.   .   .   .   .   .   .   .   p - p   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .
+\end{lstlisting}
+\begin{lstlisting}
+Score: 25
+\end{lstlisting}
+
+
+\pagebreak
+
+\section*{hp-string 14}
+\begin{lstlisting}[basicstyle=\fontsize{6}{11}\ttfamily]
+pppppphphhppppphhhphhhhhphhpppphhpphhphhhhhphhhhhhhhhhphhphhhhhhhppppppppppphhhhhhhpphphhhpppppphphh
+ffffffffflfrrflfffffffffflfrrfllrrllrrlfflrrlffffrrfflrrlfffffffflffffrrfffflfffffflfrrfllffrrfflff
+\end{lstlisting}
+\begin{lstlisting}[basicstyle=\fontsize{1}{11}\ttfamily]
+.   .   .   .   .   .   .   .   .   p - p   .   .   .   .   .   .   .   .   .   .   p - p   .   .   .   .   .   .   .   .   .   .   .   .   .
+                                    |   |                                           |   |
+.   .   .   .   .   .   .   .   .   p   p   .   .   .   .   .   .   .   .   .   .   h   p   h - p   h - p   .   .   h - p   .   .   .   .   .
+                                    |   |                                           |   |   |   |   |   |           |   |
+p - p - p - p - p - p - h - p - h - H   p - H - h - H - p - H - h - H - h - H - p - H   p - H   p - H * h - H - h - H * h - H - h - H - h - H
+                                *   *       *   *   *       *   *   *   *   *       *       *       *   *   *   *   *       *   *   *   *   |
+.   .   .   .   .   .   .   .   H - h - p - h * H - h   p - h - H - h - H - h - H - h   p - h - H - h - H - h - H - h - p - h * H - h - H - h
+                                            |   |   |   |                           |   |                                   |   |
+.   .   .   .   .   .   .   .   .   .   .   p   p   H   p   .   .   .   .   .   .   p   p   .   .   .   .   .   .   .   .   H - p   .   .   .
+                                            |   |   |   |                           |   |
+.   .   .   .   .   .   .   .   .   .   .   p   p   p - H   .   .   .   .   .   .   p   p   .   .   .   .   .   .   .   .   .   .   .   .   .
+                                            |   |                                   |   |
+.   .   .   .   .   .   .   .   .   .   .   p - p   .   .   .   .   .   .   .   .   p   p   .   .   .   .   .   .   .   .   .   .   .   .   .
+                                                                                    |   |
+.   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   p   p   .   .   .   .   .   .   .   .   .   .   .   .   .
+                                                                                    |   |
+.   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   p - p   .   .   .   .   .   .   .   .   .   .   .   .   .
+
+\end{lstlisting}
+\begin{lstlisting}
+Score: 25
+\end{lstlisting}
+
+\pagebreak
+
+\section*{hp-string 15}
+\begin{lstlisting}[basicstyle=\fontsize{6}{11}\ttfamily]
+ppphhpphhhhpphhhphhphhphhhhpppppppphhhhhhpphhhhhhppppppppphphhphhhhhhhhhhhpphhhphhphpphphhhpppppphhh
+ffflrrlfflrrlfffflrrlfffflfffrrffflfffflrrlffffrrlfffrrffflfflrrlfffffffflrrlfffflfrrflfffflffrrffl
+\end{lstlisting}
+\begin{lstlisting}[basicstyle=\fontsize{1}{11}\ttfamily]
+.   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   p - p   .   .   .   .   .   .   .   .   .   .   .
+                                                                            |   |
+.   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   p   p   .   .   .   .   .   .   .   .   .   .   .
+                                                                            |   |
+.   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   p   p   .   .   .   .   .   .   .   .   .   .   .
+                                                                            |   |
+.   .   .   h - p   .   .   h - p   .   .   .   .   h - p   .   .   .   .   h   p   .   .   .   .   h - p   .   .   .   .   .
+            |   |           |   |                   |   |                   |   |                   |   |
+p - p - p - H   p - H - h - H   p - H - h - H - p - H * h - H - p - H - h - H   p - H - h - H - h - H   p - H - h - H - h - H
+            *       *   *   *       *   *   *       *   *   *       *   *   *       *   *   *   *   *       *       *       |
+.   .   H - h   p - h - H - h - p - h * H - h - p - h - H - h * H - h - H - h - H - h - H - h - H - h * H - h - p - h   p - h
+            |   |                   |   |                   |   |                                   |   |           |   |
+.   .   .   H   p   .   .   .   .   p   p   .   .   .   .   p - p   .   .   .   .   .   .   .   .   H - p   .   .   p   p   .
+            |   |                   |   |                                                                           |   |
+.   .   .   p   p   .   .   .   .   p - H   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   p   p   .
+            |   |                                                                                                   |   |
+.   .   .   p - p   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   p   p   .
+                                                                                                                    |   |
+.   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   p - p   .
+\end{lstlisting}
+\begin{lstlisting}
+Score: 24
+\end{lstlisting}
+
 \chapter*{Our folding approach}
 \subsection*{Bruteforce for $n < 20$}
 \begin{algorithm}[H]
@@ -74,21 +391,21 @@ You guys know the algorithm...
 \subsection*{Approximation}
 \begin{tabular}{l|c|c|c}
 	& score	& time	& fold \\\hline
-1	& x		& x		& x	\\\hline
-2	& x		& x		& x	\\\hline
-3	& x		& x		& x	\\\hline
-4	& x		& x		& x	\\\hline
-5	& x		& x		& x	\\\hline
-6	& x		& x		& x	\\\hline
-7	& x		& x		& x	\\\hline
-8	& x		& x		& x	\\\hline
-9	& x		& x		& x	\\\hline
-10	& x		& x		& x	\\\hline
-11	& x		& x		& x	\\\hline
-12	& x		& x		& x	\\\hline
-13	& x		& x		& x	\\\hline
-14	& x		& x		& x	\\\hline
-15	& x		& x		& x	\\
+1	& -2		& $<$1ms		& flfrrflffrrflrrlf	\\\hline
+2	& -5		& $<$1ms		& fffffffrrfffflrrl	\\\hline
+3	& -4		& $<$1ms		& ffffffffffrrfffff	\\\hline
+4	& -5		& $<$1ms		& fflrrlfffrrfflrrlff	\\\hline
+5	& -3		& $<$1ms		& flrrlffffrrffffffff	\\\hline
+6	& -4		& $<$1ms		& lrrllfrrflfrrlfrrfllrrl	\\\hline
+7	& -4		& $<$1ms		& ffffflfrrflfffrrfflfrrfl	\\\hline
+8	& -5		& $<$1ms		& ffflrrllffrrfflffrrfflrrllfrrflffff	\\\hline
+9	& -11		& $<$1ms		& fflrrllrrllfrrflffffffrrfflffrrffllrrllfrrflfff	\\\hline
+10	& -12		& $<$1ms		& ffffffffffffffffffffffffrrfffffffffffffffffffffff	\\\hline
+11	& -20		& $<$1ms		& ffflrrlfffffflrrlffffffffffffrrffffffffffflfrrflfffflrrlfff	\\\hline
+12	& -20		& $<$1ms		& ffffffffffffffflrrllrrllfrrflffrrflfrrfllrrllrrlfffffffffffffff	\\\hline
+13	& -25		& $<$1ms		& ffflfrrflfffffffffflffrrfflfffffffffflrrlfrrfffffffflrrlfffffffffflffrrffllrrllrrlff	\\\hline
+14	& -25		& $<$1ms		& ffffffffflfrrflfffffffffflfrrfllrrllrrlfflrrlffffrrfflrrlfffffffflffffrrfffflfffffflfrrfllffrrfflff	\\\hline
+15	& -24		& $<$1ms		& ffflrrlfflrrlfffflrrlfffflfffrrffflfffflrrlffffrrlfffrrffflfflrrlfffffffflrrlfffflfrrflfffflffrrffl	\\
 \end{tabular}
 
 \subsection*{Bruteforce and Sampling}
