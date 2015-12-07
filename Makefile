@@ -30,6 +30,8 @@ nj : phylib_reader.hpp saitou_nei.hpp nj.cpp newick_parser.hpp
 cpa : phylib_reader.hpp saitou_nei.hpp newick_parser.hpp test_lib.hpp rfdist.hpp compare_nj.cpp
 	$(CC) -fopenmp phylib_reader.hpp saitou_nei.hpp newick_parser.hpp test_lib.hpp rfdist.hpp compare_nj.cpp -o cpa
 
+hpf : approx_hpfold.cpp
+	$(CC) approx_hpfold.cpp -o approx_hpfold
 
 crf : newick_parser.hpp rfdist.hpp compare_rfdist.cpp
 	$(CC) newick_parser.hpp rfdist.hpp compare_rfdist.cpp -o crf
